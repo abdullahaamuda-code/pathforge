@@ -28,7 +28,7 @@ export default function SignupPage() {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(result.user, { displayName: name });
       await sendEmailVerification(result.user, {
-        url: "https://pathforge-inky.vercel.app/login?verified=true",
+        url: "https://pathforge-app.vercel.app/login?verified=true",
       });
       await setDoc(doc(db, "users", result.user.uid), {
         uid: result.user.uid,
