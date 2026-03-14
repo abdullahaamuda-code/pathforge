@@ -252,7 +252,7 @@ export default function RoadmapPage() {
       }
 
       // Footer on all pages
-      const pageCount = Number(pdf.internal.getNumberOfPages());
+      const pageCount = pdf.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
         pdf.setPage(i);
         pdf.setFontSize(7);
