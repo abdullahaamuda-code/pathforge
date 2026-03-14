@@ -225,7 +225,7 @@ export default function MentorPage() {
       </div>
 
       {/* Chat area */}
-      <div className="flex-1 max-w-3xl w-full mx-auto px-4 py-6 pb-48 md:pb-32 overflow-y-auto">
+      <div className="flex-1 max-w-3xl w-full mx-auto px-4 py-6 pb-56 md:pb-32 overflow-y-auto">
 
         {/* Clear chat button — only shows when there are real messages */}
         {messages.length > 1 && (
@@ -321,59 +321,61 @@ export default function MentorPage() {
       <div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 py-3 z-20">
 
         {/* Mobile nav */}
-<div className="fixed bottom-0 left-0 right-0 border-t border-[#2C2C2A] bg-[#080a0f] px-6 py-3 flex items-center justify-around md:hidden z-10">
-  {[
-    { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
-    { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
-    { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
-    { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
-    { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
-  ].map((item) => {
-    const isActive = item.href === "/mentor";
-    return (
-      <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={isActive ? "#ffffff" : "#888780"}
-          strokeLinecap="round" strokeLinejoin="round">
-          {item.icon}
-        </svg>
-        <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
-          {item.label}
-        </span>
-      </Link>
-    );
-  })}
+{/* Input fixed at bottom */}
+<div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 pt-3 pb-3 z-20">
+
+  {/* Mobile nav — sits above input */}
+  <div className="flex items-center justify-around mb-3 md:hidden">
+    {[
+      { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
+      { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
+      { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
+      { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
+      { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
+    ].map((item) => {
+      const isActive = item.href === "/mentor";
+      return (
+        <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke={isActive ? "#ffffff" : "#888780"}
+            strokeLinecap="round" strokeLinejoin="round">
+            {item.icon}
+          </svg>
+          <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
+            {item.label}
+          </span>
+        </Link>
+      );
+    })}
+  </div>
+
+  {/* Input row */}
+  <div className="max-w-3xl mx-auto flex gap-3 items-end">
+    <textarea
+      ref={inputRef}
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      onKeyDown={handleKeyDown}
+      placeholder="Ask your mentor anything..."
+      rows={1}
+      className="flex-1 bg-[#0f1117] border border-[#2C2C2A] rounded-xl px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] resize-none transition"
+      style={{ maxHeight: "120px", overflowY: "auto" }}
+      onInput={(e) => {
+        e.target.style.height = "auto";
+        e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+      }}
+    />
+    <button
+      onClick={() => sendMessage(input)}
+      disabled={loading || !input.trim()}
+      className="w-10 h-10 bg-[#534AB7] hover:bg-[#4840a0] rounded-xl flex items-center justify-center transition disabled:opacity-40 flex-shrink-0"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
+          stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </button>
+  </div>
 </div>
-
-        <div className="max-w-3xl mx-auto flex gap-3 items-end">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Ask your mentor anything..."
-            rows={1}
-            className="flex-1 bg-[#0f1117] border border-[#2C2C2A] rounded-xl px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] resize-none transition"
-            style={{ maxHeight: "120px", overflowY: "auto" }}
-            onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = "auto";
-              target.style.height = Math.min(target.scrollHeight, 120) + "px";
-            }}
-          />
-          <button
-            onClick={() => sendMessage(input)}
-            disabled={loading || !input.trim()}
-            className="w-10 h-10 bg-[#534AB7] hover:bg-[#4840a0] rounded-xl flex items-center justify-center transition disabled:opacity-40 flex-shrink-0"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
-                stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-    </div>
   );
 }
