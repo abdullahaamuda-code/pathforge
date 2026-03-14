@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getUser } from "@/lib/firestore";
 import Link from "next/link";
-import React from "react";
 
 const suggestions = [
   "How do I write a strong scholarship essay?",
@@ -13,6 +12,14 @@ const suggestions = [
   "What's the difference between a CV and a resume?",
   "How do I negotiate a job offer?",
   "What certifications are worth doing for free?",
+];
+
+const navItems = [
+  { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
+  { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
+  { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
+  { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
+  { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
 ];
 
 export default function MentorPage() {
@@ -91,21 +98,13 @@ export default function MentorPage() {
           history: history.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
-
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-
-      const finalMessages = [
-        ...updatedMessages,
-        { role: "assistant", content: data.reply },
-      ];
+      const finalMessages = [...updatedMessages, { role: "assistant", content: data.reply }];
       setMessages(finalMessages);
       localStorage.setItem(chatKey, JSON.stringify(finalMessages));
     } catch (err) {
-      const errorMessages = [
-        ...updatedMessages,
-        { role: "assistant", content: "Sorry, ran into an issue. Try again." },
-      ];
+      const errorMessages = [...updatedMessages, { role: "assistant", content: "Sorry, ran into an issue. Try again." }];
       setMessages(errorMessages);
       localStorage.setItem(chatKey, JSON.stringify(errorMessages));
     } finally {
@@ -127,31 +126,19 @@ export default function MentorPage() {
     setLoading(true);
 
     try {
-      const history = messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      }));
-
+      const history = messages.map((m) => ({ role: m.role, content: m.content }));
       const res = await fetch("/api/mentor-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ uid: user.uid, message, history }),
       });
-
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-
-      const finalMessages = [
-        ...updatedMessages,
-        { role: "assistant", content: data.reply },
-      ];
+      const finalMessages = [...updatedMessages, { role: "assistant", content: data.reply }];
       setMessages(finalMessages);
       localStorage.setItem(chatKey, JSON.stringify(finalMessages));
     } catch (err) {
-      const errorMessages = [
-        ...updatedMessages,
-        { role: "assistant", content: "Sorry, ran into an issue. Try again." },
-      ];
+      const errorMessages = [...updatedMessages, { role: "assistant", content: "Sorry, ran into an issue. Try again." }];
       setMessages(errorMessages);
       localStorage.setItem(chatKey, JSON.stringify(errorMessages));
     } finally {
@@ -163,17 +150,13 @@ export default function MentorPage() {
   function clearChat() {
     const chatKey = `pathforge_chat_${user.uid}`;
     localStorage.removeItem(chatKey);
-
     const firstName = profile?.name?.split(" ")[0] || "there";
     const stage = profile?.stage || "student";
     const interest = profile?.interests?.[0] || "your field";
-
     const greeting = {
       role: "assistant",
       content: `Hey ${firstName} — fresh start. You're a ${stage} interested in ${interest}. What do you want to work on?`,
     };
-
-    // Reset everything cleanly
     setLoading(false);
     setInput("");
     setMessages([greeting]);
@@ -227,18 +210,16 @@ export default function MentorPage() {
       {/* Chat area */}
       <div className="flex-1 max-w-3xl w-full mx-auto px-4 py-6 pb-56 md:pb-32 overflow-y-auto">
 
-        {/* Clear chat button — only shows when there are real messages */}
+        {/* Clear chat button */}
         {messages.length > 1 && (
           <div className="flex justify-center mb-6">
             <button
               onClick={clearChat}
-              className="flex items-center gap-1.5 border border-[#2C2C2A] bg-[#0f1117] hover:border-[#444441] text-[#444441] hover:text-[#888780] text-xs px-4 py-2 rounded-full transition"
+              className="flex items-center gap-1.5 border border-[#2C2C2A] bg-[#0f1117] hover:border-[#444441] text-[#888780] hover:text-white text-xs px-4 py-2 rounded-full transition"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                />
+                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Clear chat
             </button>
@@ -248,7 +229,7 @@ export default function MentorPage() {
         {/* Suggestions */}
         {messages.length === 1 && (
           <div className="mb-6">
-            <p className="text-[#444441] text-xs mb-3 text-center">Try asking</p>
+            <p className="text-[#888780] text-xs mb-3 text-center">Try asking</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {suggestions.map((s, i) => (
                 <button
@@ -266,10 +247,7 @@ export default function MentorPage() {
         {/* Messages */}
         <div className="space-y-4">
           {messages.map((msg, i) => (
-            <div
-              key={i}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-            >
+            <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
               {msg.role === "assistant" && (
                 <div className="w-6 h-6 bg-[#7F77DD] rounded-lg flex items-center justify-center flex-shrink-0 mr-2 mt-1">
                   <svg width="12" height="12" viewBox="0 0 18 18" fill="none">
@@ -278,13 +256,11 @@ export default function MentorPage() {
                   </svg>
                 </div>
               )}
-              <div
-                className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-[#534AB7] text-white rounded-tr-sm"
-                    : "bg-[#0f1117] border border-[#2C2C2A] text-[#B4B2A9] rounded-tl-sm"
-                }`}
-              >
+              <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                msg.role === "user"
+                  ? "bg-[#534AB7] text-white rounded-tr-sm"
+                  : "bg-[#0f1117] border border-[#2C2C2A] text-[#B4B2A9] rounded-tl-sm"
+              }`}>
                 {msg.content.split("\n").map((line, j) => (
                   <span key={j}>
                     {line}
@@ -317,65 +293,58 @@ export default function MentorPage() {
         </div>
       </div>
 
-      {/* Input fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 py-3 z-20">
+      {/* Fixed bottom — nav + input */}
+      <div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 pt-3 pb-3 z-20">
 
         {/* Mobile nav */}
-{/* Input fixed at bottom */}
-<div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 pt-3 pb-3 z-20">
+        <div className="flex items-center justify-around mb-3 md:hidden">
+          {navItems.map((item) => {
+            const isActive = item.href === "/mentor";
+            return (
+              <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke={isActive ? "#ffffff" : "#888780"}
+                  strokeLinecap="round" strokeLinejoin="round">
+                  {item.icon}
+                </svg>
+                <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
 
-  {/* Mobile nav — sits above input */}
-  <div className="flex items-center justify-around mb-3 md:hidden">
-    {[
-      { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
-      { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
-      { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
-      { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
-      { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
-    ].map((item) => {
-      const isActive = item.href === "/mentor";
-      return (
-        <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-            stroke={isActive ? "#ffffff" : "#888780"}
-            strokeLinecap="round" strokeLinejoin="round">
-            {item.icon}
-          </svg>
-          <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
-            {item.label}
-          </span>
-        </Link>
-      );
-    })}
-  </div>
+        {/* Input row */}
+        <div className="max-w-3xl mx-auto flex gap-3 items-end">
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask your mentor anything..."
+            rows={1}
+            className="flex-1 bg-[#0f1117] border border-[#2C2C2A] rounded-xl px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] resize-none transition"
+            style={{ maxHeight: "120px", overflowY: "auto" }}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = "auto";
+              target.style.height = Math.min(target.scrollHeight, 120) + "px";
+            }}
+          />
+          <button
+            onClick={() => sendMessage(input)}
+            disabled={loading || !input.trim()}
+            className="w-10 h-10 bg-[#534AB7] hover:bg-[#4840a0] rounded-xl flex items-center justify-center transition disabled:opacity-40 flex-shrink-0"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
+                stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
 
-  {/* Input row */}
-  <div className="max-w-3xl mx-auto flex gap-3 items-end">
-    <textarea
-      ref={inputRef}
-      value={input}
-      onChange={(e) => setInput(e.target.value)}
-      onKeyDown={handleKeyDown}
-      placeholder="Ask your mentor anything..."
-      rows={1}
-      className="flex-1 bg-[#0f1117] border border-[#2C2C2A] rounded-xl px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] resize-none transition"
-      style={{ maxHeight: "120px", overflowY: "auto" }}
-      onInput={(e) => {
-        e.target.style.height = "auto";
-        e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
-      }}
-    />
-    <button
-      onClick={() => sendMessage(input)}
-      disabled={loading || !input.trim()}
-      className="w-10 h-10 bg-[#534AB7] hover:bg-[#4840a0] rounded-xl flex items-center justify-center transition disabled:opacity-40 flex-shrink-0"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
-          stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </button>
-  </div>
-</div>
+    </div>
   );
 }
