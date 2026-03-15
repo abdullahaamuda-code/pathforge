@@ -85,16 +85,16 @@ export default function LoginPage() {
                 : "Sign in to continue building your personalized career roadmap and discover opportunities matched to your profile."
               }
             </p>
-            <div className="flex flex-wrap gap-2 mt-6">
-              {lang === "fr"
-                ? ["Feuille de route", "Mentor IA", "Opportunités", "Analyse des lacunes"]
-                : ["Personalized roadmap", "AI mentor", "Opportunity matching", "Gap analysis"]
-              }.map((tag) => (
-                <span key={tag} className="text-[11px] px-3 py-1 rounded-full border border-[#2C2C2A] text-[#B4B2A9]">
-                  {tag}
-                </span>
-              ))}
-            </div>
+<div className="flex flex-wrap gap-2 mt-6">
+  {(lang === "fr"
+    ? ["Feuille de route", "Mentor IA", "Opportunités", "Analyse des lacunes"]
+    : ["Personalized roadmap", "AI mentor", "Opportunity matching", "Gap analysis"]
+  ).map((tag) => (
+    <span key={tag} className="text-[11px] px-3 py-1 rounded-full border border-[#2C2C2A] text-[#B4B2A9]">
+      {tag}
+    </span>
+  ))}
+</div>
           </div>
           <p className="text-[#444441] text-xs">
             {lang === "fr" ? "Utilisé par des étudiants à travers l'Afrique et au-delà" : "Trusted by students across Africa and beyond"}
