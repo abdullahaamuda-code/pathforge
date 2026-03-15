@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getSaved } from "@/lib/firestore";
+import { getSaved, getUser } from "@/lib/firestore";
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import Link from "next/link";
-import React from "react";
+import { t } from "@/lib/i18n";
 
 const typeColors = {
   job: "bg-[#1a1830] text-[#7F77DD] border border-[#7F77DD]/20",
@@ -18,6 +18,7 @@ const typeColors = {
 export default function SavedPage() {
   const { user } = useAuth();
   const [saved, setSaved] = useState([]);
+  const [lang, setLang] = useState("en");
   const [loading, setLoading] = useState(true);
   const [removingId, setRemovingId] = useState(null);
 
@@ -27,8 +28,12 @@ export default function SavedPage() {
 
   async function loadSaved() {
     try {
-      const data = await getSaved(user.uid);
+      const [data, userData] = await Promise.all([
+        getSaved(user.uid),
+        getUser(user.uid),
+      ]);
       setSaved(data);
+      setLang(userData?.language || "en");
     } catch (err) {
       console.error(err);
     } finally {
@@ -51,8 +56,13 @@ export default function SavedPage() {
   const getDaysUntil = (deadline) => {
     if (!deadline) return null;
     const diff = new Date(deadline).getTime() - new Date().getTime();
-    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return days;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  };
+
+  const deadlineLabel = (daysLeft) => {
+    if (daysLeft <= 0) return lang === "fr" ? "Date limite passée" : "Deadline passed";
+    if (daysLeft === 1) return lang === "fr" ? "1 jour restant" : "1 day left";
+    return lang === "fr" ? `${daysLeft} jours restants` : `${daysLeft} days left`;
   };
 
   if (loading) {
@@ -84,10 +94,10 @@ export default function SavedPage() {
         </div>
         <div className="hidden md:flex items-center gap-6">
           <Link href="/dashboard" className="text-[#888780] text-xs hover:text-white transition">Dashboard</Link>
-          <Link href="/roadmap" className="text-[#888780] text-xs hover:text-white transition">Roadmap</Link>
-          <Link href="/opportunities" className="text-[#888780] text-xs hover:text-white transition">Opportunities</Link>
-          <Link href="/saved" className="text-white text-xs font-medium">Saved</Link>
-          <Link href="/mentor" className="text-[#888780] text-xs hover:text-white transition">AI Mentor</Link>
+          <Link href="/roadmap" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "nav.roadmap")}</Link>
+          <Link href="/opportunities" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "dashboard.opportunities")}</Link>
+          <Link href="/saved" className="text-white text-xs font-medium">{t(lang, "dashboard.saved")}</Link>
+          <Link href="/mentor" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "dashboard.aiMentor")}</Link>
         </div>
       </div>
 
@@ -95,8 +105,12 @@ export default function SavedPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <p className="text-[#444441] text-xs mb-1">Your bookmarks</p>
-          <h1 className="text-white text-xl font-medium">Saved opportunities</h1>
+          <p className="text-[#888780] text-xs mb-1">
+            {lang === "fr" ? "Vos favoris" : "Your bookmarks"}
+          </p>
+          <h1 className="text-white text-xl font-medium">
+            {lang === "fr" ? "Opportunités sauvegardées" : "Saved opportunities"}
+          </h1>
         </div>
 
         {saved.length === 0 ? (
@@ -107,15 +121,20 @@ export default function SavedPage() {
                   stroke="#444441" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <p className="text-[#888780] text-sm">Nothing saved yet</p>
+            <p className="text-[#888780] text-sm">
+              {lang === "fr" ? "Rien de sauvegardé pour l'instant" : "Nothing saved yet"}
+            </p>
             <p className="text-[#444441] text-xs text-center max-w-xs">
-              Browse opportunities and tap Save on anything you want to track
+              {lang === "fr"
+                ? "Parcourez les opportunités et appuyez sur Sauvegarder pour suivre celles qui vous intéressent"
+                : "Browse opportunities and tap Save on anything you want to track"
+              }
             </p>
             <Link
               href="/opportunities"
               className="bg-[#534AB7] hover:bg-[#4840a0] text-white text-xs px-6 py-2.5 rounded-lg transition mt-2"
             >
-              Browse opportunities
+              {lang === "fr" ? "Parcourir les opportunités" : "Browse opportunities"}
             </Link>
           </div>
         ) : (
@@ -141,17 +160,11 @@ export default function SavedPage() {
                               ? "bg-yellow-900/20 text-yellow-400 border-yellow-800/30"
                               : "bg-[#1a1c23] text-[#888780] border-[#2C2C2A]"
                           }`}>
-                            {daysLeft <= 0
-                              ? "Deadline passed"
-                              : daysLeft === 1
-                              ? "1 day left"
-                              : `${daysLeft} days left`}
+                            {deadlineLabel(daysLeft)}
                           </span>
                         )}
                       </div>
-                      <p className="text-white text-sm font-medium leading-snug mb-1">
-                        {item.title}
-                      </p>
+                      <p className="text-white text-sm font-medium leading-snug mb-1">{item.title}</p>
                       <p className="text-[#888780] text-xs">{item.provider}</p>
                     </div>
 
@@ -159,30 +172,30 @@ export default function SavedPage() {
                       onClick={() => handleRemove(item.id)}
                       disabled={removingId === item.id}
                       className="text-[#444441] hover:text-red-400 transition flex-shrink-0 mt-1"
-                      title="Remove from saved"
+                      title={lang === "fr" ? "Retirer des sauvegardés" : "Remove from saved"}
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M6 18L18 6M6 6l12 12"
-                          stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                       </svg>
                     </button>
                   </div>
 
                   <div className="flex items-center gap-3 mt-4">
                     {item.url && (
-                      <a
+                      
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-[#534AB7] hover:bg-[#4840a0] text-white text-xs px-4 py-2 rounded-lg transition"
                       >
-                        Apply now
+                        {t(lang, "opportunities.applyNow")}
                       </a>
                     )}
                     <span className="text-[#444441] text-xs">
-                      Saved {item.savedAt?.toDate
-                        ? new Date(item.savedAt.toDate()).toLocaleDateString()
-                        : "recently"}
+                      {lang === "fr" ? "Sauvegardé" : "Saved"}{" "}
+                      {item.savedAt?.toDate
+                        ? new Date(item.savedAt.toDate()).toLocaleDateString(lang === "fr" ? "fr-FR" : "en-GB")
+                        : (lang === "fr" ? "récemment" : "recently")}
                     </span>
                   </div>
                 </div>
@@ -193,29 +206,29 @@ export default function SavedPage() {
       </div>
 
       {/* Mobile bottom nav */}
-<div className="fixed bottom-0 left-0 right-0 border-t border-[#2C2C2A] bg-[#080a0f] px-6 py-3 flex items-center justify-around md:hidden z-10">
-  {[
-    { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
-    { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
-    { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
-    { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
-    { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
-  ].map((item) => {
-    const isActive = item.href === "/saved";
-    return (
-      <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={isActive ? "#ffffff" : "#888780"}
-          strokeLinecap="round" strokeLinejoin="round">
-          {item.icon}
-        </svg>
-        <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
-          {item.label}
-        </span>
-      </Link>
-    );
-  })}
-</div>
+      <div className="fixed bottom-0 left-0 right-0 border-t border-[#2C2C2A] bg-[#080a0f] px-6 py-3 flex items-center justify-around md:hidden z-10">
+        {[
+          { label: t(lang, "nav.home"), href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
+          { label: t(lang, "nav.roadmap"), href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
+          { label: t(lang, "nav.explore"), href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
+          { label: t(lang, "nav.saved"), href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
+          { label: t(lang, "nav.mentor"), href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
+        ].map((item) => {
+          const isActive = item.href === "/saved";
+          return (
+            <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke={isActive ? "#ffffff" : "#888780"}
+                strokeLinecap="round" strokeLinejoin="round">
+                {item.icon}
+              </svg>
+              <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
 
     </div>
   );
