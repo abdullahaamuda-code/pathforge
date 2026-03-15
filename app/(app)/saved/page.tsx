@@ -182,7 +182,7 @@ export default function SavedPage() {
 
                   <div className="flex items-center gap-3 mt-4">
                     {item.url && (
-                      
+                      <a
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
