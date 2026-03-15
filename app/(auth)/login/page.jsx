@@ -65,12 +65,15 @@ export default function LoginPage() {
         {/* Left panel */}
         <div className="hidden md:flex bg-[#0f1117] p-10 flex-col justify-between min-h-[520px]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </div>
+            <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+</div>
             <span className="text-white font-medium text-base tracking-tight">PathForge</span>
           </div>
           <div>
@@ -144,11 +147,14 @@ export default function LoginPage() {
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 md:hidden">
             <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-                <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </div>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+</div>
             <span className="text-gray-900 font-medium text-sm">PathForge</span>
           </div>
 
