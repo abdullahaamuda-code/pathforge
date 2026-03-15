@@ -29,9 +29,7 @@ export default function MentorPage() {
   const { user } = useAuth();
 
   const [profile, setProfile] = useState<any>(null);
-  const [messages, setMessages] = useState
-    { role: "user" | "assistant"; content: string }[]
-  >([]);
+  const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
