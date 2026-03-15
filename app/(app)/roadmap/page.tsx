@@ -315,21 +315,25 @@ export default function RoadmapPage() {
   return (
     <div className="min-h-screen bg-[#080a0f] text-white">
 
-      {/* Nav */}
-      <div className="border-b border-white/5 px-6 py-4 flex items-center justify-between sticky top-0 bg-[#080a0f] z-10">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-              <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <span className="text-white font-medium text-sm">PathForge</span>
-        </div>
-        <Link href="/dashboard" className="text-[#888780] text-xs hover:text-white transition">
-          Dashboard
-        </Link>
-      </div>
+{/* Nav */}
+<div className="border-b border-white/5 px-6 py-4 flex items-center justify-between sticky top-0 bg-[#080a0f] z-10">
+  <div className="flex items-center gap-2.5">
+    <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+        <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    </div>
+    <span className="text-white font-medium text-sm">PathForge</span>
+  </div>
+  <div className="hidden md:flex items-center gap-6">
+    <Link href="/dashboard" className="text-[#888780] text-xs hover:text-white transition">Dashboard</Link>
+    <Link href="/roadmap" className="text-white text-xs font-medium">Roadmap</Link>
+    <Link href="/opportunities" className="text-[#888780] text-xs hover:text-white transition">Opportunities</Link>
+    <Link href="/saved" className="text-[#888780] text-xs hover:text-white transition">Saved</Link>
+    <Link href="/mentor" className="text-[#888780] text-xs hover:text-white transition">AI Mentor</Link>
+  </div>
+</div>
 
       {/* Content */}
       <div ref={contentRef} className="max-w-4xl mx-auto px-6 py-10">
@@ -513,6 +517,31 @@ export default function RoadmapPage() {
         </div>
 
       </div>
+
+    {/* Mobile bottom nav */}
+<div className="fixed bottom-0 left-0 right-0 border-t border-[#2C2C2A] bg-[#080a0f] px-6 py-3 flex items-center justify-around md:hidden z-10">
+  {[
+    { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
+    { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
+    { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
+    { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
+    { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
+  ].map((item) => {
+    const isActive = item.href === "/roadmap";
+    return (
+      <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke={isActive ? "#ffffff" : "#888780"}
+          strokeLinecap="round" strokeLinejoin="round">
+          {item.icon}
+        </svg>
+        <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
+          {item.label}
+        </span>
+      </Link>
+    );
+  })}
+</div>
     </div>
   );
 }
