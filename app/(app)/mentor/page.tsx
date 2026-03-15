@@ -266,10 +266,13 @@ export default function MentorPage() {
     return (
       <div className="min-h-screen bg-[#080a0f] flex items-center justify-center">
         <div className="w-7 h-7 bg-[#7F77DD] rounded-lg animate-pulse flex items-center justify-center">
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-            <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
+         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+  <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+  <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+  <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+  <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+</svg>
         </div>
       </div>
     );
@@ -281,12 +284,15 @@ export default function MentorPage() {
       {/* Nav */}
       <div className="border-b border-[#2C2C2A] px-6 py-4 flex items-center justify-between sticky top-0 bg-[#080a0f] z-10">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-              <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </div>
+         <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+</div>
           <span className="text-white font-medium text-sm">PathForge</span>
         </div>
         <div className="hidden md:flex items-center gap-6">
