@@ -9,6 +9,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import Link from "next/link";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
