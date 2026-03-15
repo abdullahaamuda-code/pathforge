@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-import re
 from datetime import datetime
 
 def scrape_opportunity_desk():
@@ -11,51 +10,69 @@ def scrape_opportunity_desk():
         "https://opportunitydesk.org/category/fellowships/",
         "https://opportunitydesk.org/category/grants/",
     ]
-
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36"}
 
     for url in urls:
+        opp_type = "fellowship"
+        if "scholarship" in url:
+            opp_type = "grant"
+        elif "grant" in url:
+            opp_type = "grant"
+
         try:
-            res = requests.get(url, headers=headers, timeout=10)
+            res = requests.get(url, headers=headers, timeout=15)
             soup = BeautifulSoup(res.content, "html.parser")
-            articles = soup.find_all("article", limit=15)
 
-            for article in articles:
+            # Try multiple selectors
+            items = (
+                soup.select("article") or
+                soup.select(".post") or
+                soup.select(".entry") or
+                soup.select("h2.entry-title") or
+                soup.select(".td-block-span6")
+            )
+
+            for item in items[:15]:
                 try:
-                    title_el = article.find("h2") or article.find("h3")
-                    link_el = article.find("a", href=True)
-                    excerpt_el = article.find("p")
+                    # Find title and link
+                    title_el = (
+                        item.select_one("h3 a") or
+                        item.select_one("h2 a") or
+                        item.select_one("h1 a") or
+                        item.select_one("a[rel='bookmark']") or
+                        item.select_one("a")
+                    )
 
-                    if not title_el or not link_el:
+                    if not title_el:
                         continue
 
                     title = title_el.get_text(strip=True)
-                    link = link_el["href"]
-                    excerpt = excerpt_el.get_text(strip=True) if excerpt_el else ""
+                    link = title_el.get("href", url)
 
-                    # Determine type from URL
-                    opp_type = "fellowship"
-                    if "scholarship" in url:
-                        opp_type = "grant"
-                    elif "grant" in url:
-                        opp_type = "grant"
+                    if not title or len(title) < 10:
+                        continue
 
-                    # Determine eligibility hints from title
+                    # Find excerpt
+                    excerpt_el = item.select_one(".td-excerpt") or item.select_one("p")
+                    excerpt = excerpt_el.get_text(strip=True)[:400] if excerpt_el else ""
+
+                    # Detect countries from title
                     countries = []
-                    if any(c in title.lower() for c in ["africa", "african"]):
+                    title_lower = title.lower()
+                    if any(w in title_lower for w in ["africa", "african"]):
                         countries = ["Africa"]
-                    elif "nigeria" in title.lower():
+                    elif "nigeria" in title_lower:
                         countries = ["Nigeria"]
-                    elif "global" in title.lower() or "international" in title.lower():
+                    elif "global" in title_lower or "international" in title_lower or "worldwide" in title_lower:
+                        countries = ["Global"]
+                    else:
                         countries = ["Global"]
 
                     opportunities.append({
                         "title": title,
                         "type": opp_type,
                         "provider": "OpportunityDesk",
-                        "description": excerpt[:400],
+                        "description": excerpt,
                         "url": link,
                         "eligibility": {
                             "countries": countries,
@@ -69,7 +86,6 @@ def scrape_opportunity_desk():
                         "scrapedAt": datetime.utcnow().isoformat(),
                     })
                 except Exception as e:
-                    print(f"Error parsing article: {e}")
                     continue
 
         except Exception as e:
@@ -85,40 +101,53 @@ def scrape_opportunities_for_africans():
     urls = [
         "https://www.opportunitiesforafricans.com/category/scholarships/",
         "https://www.opportunitiesforafricans.com/category/fellowships/",
+        "https://www.opportunitiesforafricans.com/category/grants/",
     ]
-
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36"}
 
     for url in urls:
+        opp_type = "fellowship"
+        if "scholarship" in url:
+            opp_type = "grant"
+        elif "grant" in url:
+            opp_type = "grant"
+
         try:
-            res = requests.get(url, headers=headers, timeout=10)
+            res = requests.get(url, headers=headers, timeout=15)
             soup = BeautifulSoup(res.content, "html.parser")
-            articles = soup.find_all("article", limit=15)
 
-            for article in articles:
+            items = (
+                soup.select("article") or
+                soup.select(".post") or
+                soup.select(".entry-title")
+            )
+
+            for item in items[:15]:
                 try:
-                    title_el = article.find("h2") or article.find("h3")
-                    link_el = article.find("a", href=True)
-                    excerpt_el = article.find("p")
+                    title_el = (
+                        item.select_one("h2 a") or
+                        item.select_one("h3 a") or
+                        item.select_one("a[rel='bookmark']") or
+                        item.select_one("a")
+                    )
 
-                    if not title_el or not link_el:
+                    if not title_el:
                         continue
 
                     title = title_el.get_text(strip=True)
-                    link = link_el["href"]
-                    excerpt = excerpt_el.get_text(strip=True) if excerpt_el else ""
+                    link = title_el.get("href", url)
 
-                    opp_type = "fellowship"
-                    if "scholarship" in url:
-                        opp_type = "grant"
+                    if not title or len(title) < 10:
+                        continue
+
+                    excerpt_el = item.select_one(".entry-summary") or item.select_one("p")
+                    excerpt = excerpt_el.get_text(strip=True)[:400] if excerpt_el else ""
 
                     opportunities.append({
                         "title": title,
                         "type": opp_type,
                         "provider": "Opportunities For Africans",
-                        "description": excerpt[:400],
+                        "description": excerpt,
                         "url": link,
                         "eligibility": {
                             "countries": ["Africa"],
@@ -131,8 +160,7 @@ def scrape_opportunities_for_africans():
                         "source": "opportunitiesforafricans",
                         "scrapedAt": datetime.utcnow().isoformat(),
                     })
-                except Exception as e:
-                    print(f"Error parsing article: {e}")
+                except Exception:
                     continue
 
         except Exception as e:
@@ -143,10 +171,71 @@ def scrape_opportunities_for_africans():
     return opportunities
 
 
+def scrape_youthop():
+    opportunities = []
+    urls = [
+        "https://youthop.com/scholarships",
+        "https://youthop.com/fellowships",
+    ]
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36"}
+
+    for url in urls:
+        opp_type = "fellowship" if "fellowship" in url else "grant"
+
+        try:
+            res = requests.get(url, headers=headers, timeout=15)
+            soup = BeautifulSoup(res.content, "html.parser")
+
+            items = soup.select("article") or soup.select(".opportunity-item") or soup.select(".post")
+
+            for item in items[:15]:
+                try:
+                    title_el = item.select_one("h2 a") or item.select_one("h3 a") or item.select_one("a")
+                    if not title_el:
+                        continue
+
+                    title = title_el.get_text(strip=True)
+                    link = title_el.get("href", url)
+
+                    if not title or len(title) < 10:
+                        continue
+
+                    excerpt_el = item.select_one("p")
+                    excerpt = excerpt_el.get_text(strip=True)[:400] if excerpt_el else ""
+
+                    opportunities.append({
+                        "title": title,
+                        "type": opp_type,
+                        "provider": "YouthOp",
+                        "description": excerpt,
+                        "url": link,
+                        "eligibility": {
+                            "countries": ["Global"],
+                            "stage": ["secondary", "undergraduate", "graduate"],
+                        },
+                        "skillTags": [],
+                        "deadline": None,
+                        "language": "en",
+                        "isActive": True,
+                        "source": "youthop",
+                        "scrapedAt": datetime.utcnow().isoformat(),
+                    })
+                except Exception:
+                    continue
+
+        except Exception as e:
+            print(f"Error scraping {url}: {e}")
+            continue
+
+    print(f"YouthOp: {len(opportunities)} opportunities found")
+    return opportunities
+
+
 if __name__ == "__main__":
     all_opportunities = []
     all_opportunities += scrape_opportunity_desk()
     all_opportunities += scrape_opportunities_for_africans()
+    all_opportunities += scrape_youthop()
 
     with open("scrapers/opportunities_output.json", "w") as f:
         json.dump(all_opportunities, f, indent=2)
