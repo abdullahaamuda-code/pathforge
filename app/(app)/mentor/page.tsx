@@ -293,12 +293,11 @@ export default function MentorPage() {
         </div>
       </div>
 
-      {/* Fixed bottom — nav + input */}
+     {/* Fixed bottom — input + nav */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 pt-3 pb-3 z-20">
 
-
-        {/* Input row */}
-        <div className="max-w-3xl mx-auto flex gap-3 items-end">
+        {/* Input row — on top */}
+        <div className="max-w-3xl mx-auto flex gap-3 items-end mb-3">
           <textarea
             ref={inputRef}
             value={input}
@@ -309,9 +308,8 @@ export default function MentorPage() {
             className="flex-1 bg-[#0f1117] border border-[#2C2C2A] rounded-xl px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] resize-none transition"
             style={{ maxHeight: "120px", overflowY: "auto" }}
             onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = "auto";
-              target.style.height = Math.min(target.scrollHeight, 120) + "px";
+              e.target.style.height = "auto";
+              e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
             }}
           />
           <button
@@ -325,9 +323,9 @@ export default function MentorPage() {
             </svg>
           </button>
         </div>
-      </div>
-        {/* Mobile nav */}
-        <div className="flex items-center justify-around mb-3 md:hidden">
+
+        {/* Mobile nav — below input */}
+        <div className="flex items-center justify-around md:hidden">
           {navItems.map((item) => {
             const isActive = item.href === "/mentor";
             return (
@@ -344,6 +342,8 @@ export default function MentorPage() {
             );
           })}
         </div>
+
+      </div>
 
     </div>
   );
