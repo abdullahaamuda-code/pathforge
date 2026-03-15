@@ -296,24 +296,6 @@ export default function MentorPage() {
       {/* Fixed bottom — nav + input */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#080a0f] border-t border-[#2C2C2A] px-4 pt-3 pb-3 z-20">
 
-        {/* Mobile nav */}
-        <div className="flex items-center justify-around mb-3 md:hidden">
-          {navItems.map((item) => {
-            const isActive = item.href === "/mentor";
-            return (
-              <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                  stroke={isActive ? "#ffffff" : "#888780"}
-                  strokeLinecap="round" strokeLinejoin="round">
-                  {item.icon}
-                </svg>
-                <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
 
         {/* Input row */}
         <div className="max-w-3xl mx-auto flex gap-3 items-end">
@@ -344,6 +326,24 @@ export default function MentorPage() {
           </button>
         </div>
       </div>
+        {/* Mobile nav */}
+        <div className="flex items-center justify-around mb-3 md:hidden">
+          {navItems.map((item) => {
+            const isActive = item.href === "/mentor";
+            return (
+              <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke={isActive ? "#ffffff" : "#888780"}
+                  strokeLinecap="round" strokeLinejoin="round">
+                  {item.icon}
+                </svg>
+                <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
 
     </div>
   );
