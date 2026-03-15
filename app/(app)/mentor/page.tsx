@@ -276,7 +276,7 @@ export default function MentorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#080a0f] text-white flex flex-col">
+    <div className="min-h-screen bg-[#080a0f] text-white pb-28 relative">
 
       {/* Nav */}
       <div className="border-b border-[#2C2C2A] px-6 py-4 flex items-center justify-between sticky top-0 bg-[#080a0f] z-10">
