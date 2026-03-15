@@ -74,13 +74,16 @@ const [lang, setLang] = useState(
 </div>
           <h2 className="text-white text-xl font-medium mb-2">{t(lang, "auth.checkEmail")}</h2>
           <p className="text-[#888780] text-sm leading-relaxed mb-2">
-            {t(lang, "auth.verificationSent")}{" "}
-            <span className="text-white">{email}</span>.
-          </p>
-          <p className="text-[#888780] text-sm leading-relaxed mb-8">
-            {t(lang, "auth.clickLink")}
-          </p>
-          <button
+  {t(lang, "auth.verificationSent")}{" "}
+  <span className="text-white">{email}</span>.
+</p>
+<p className="text-[#888780] text-sm leading-relaxed mb-8">
+  {lang === "fr"
+    ? "Cliquez sur le lien dans l’email pour vérifier votre adresse, puis connectez-vous. Si vous ne voyez pas l’email, vérifiez aussi votre dossier spam."
+    : "Click the link in the email to verify your address, then sign in. If you don’t see the email, remember to also check your spam folder."
+  }
+</p>
+
             onClick={() => {
               document.cookie = "__session=; path=/; max-age=0";
               window.location.href = "/login";
@@ -181,12 +184,15 @@ const [lang, setLang] = useState(
 
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 md:hidden">
-            <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-                <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </div>
+<div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+</div>
             <span className="text-gray-900 font-medium text-sm">PathForge</span>
           </div>
 
