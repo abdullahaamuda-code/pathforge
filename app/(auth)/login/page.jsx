@@ -18,7 +18,9 @@ export default function LoginPage() {
   const [verified, setVerified] = useState(false);
 
   // Detect browser language for auth pages
-  const lang = typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en";
+ const [lang, setLang] = useState(
+  typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en"
+);
 
   useEffect(() => {
     if (searchParams.get("verified") === "true") {
