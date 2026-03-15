@@ -38,7 +38,7 @@ export default function RoadmapPage() {
     }
   }
 
-  async function generateRoadmap(userDataOverride) {
+  async function generateRoadmap(userDataOverride?: any) {
     setGenerating(true);
     setError("");
     try {
