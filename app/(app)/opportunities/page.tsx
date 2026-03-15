@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getUser, getOpportunities, saveOpportunity, getSaved, saveUserOpportunities, getUserOpportunities } from "@/lib/firestore";
+import { getUser, getOpportunities, saveOpportunity, getSaved, saveUserOpportunities, getUserOpportunities, saveUserJobs, getUserJobs } from "@/lib/firestore";
 import { fetchJobs } from "@/lib/jobs";
 import Link from "next/link";
 import React from "react";
