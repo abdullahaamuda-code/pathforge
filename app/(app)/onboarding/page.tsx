@@ -9,7 +9,7 @@ import { t, interpolate } from "@/lib/i18n";
 export default function OnboardingPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState({});
+const [answers, setAnswers] = useState<Record<string, any>>({});
   const [saving, setSaving] = useState(false);
 
   const lang = answers.language || "en";
