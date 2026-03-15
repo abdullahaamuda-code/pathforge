@@ -63,17 +63,15 @@ const [lang, setLang] = useState(
     return (
       <div className="min-h-screen bg-[#080a0f] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          <div className="w-12 h-12 bg-[#1a1830] rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                stroke="#7F77DD"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+          <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+</div>
           <h2 className="text-white text-xl font-medium mb-2">{t(lang, "auth.checkEmail")}</h2>
           <p className="text-[#888780] text-sm leading-relaxed mb-2">
             {t(lang, "auth.verificationSent")}{" "}
@@ -103,12 +101,15 @@ const [lang, setLang] = useState(
         {/* Left panel */}
         <div className="hidden md:flex bg-[#0f1117] p-10 flex-col justify-between min-h-[560px]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4 14 L9 4 L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6 10.5 L12 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </div>
+            <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+</div>
             <span className="text-white font-medium text-base tracking-tight">PathForge</span>
           </div>
           <div>
