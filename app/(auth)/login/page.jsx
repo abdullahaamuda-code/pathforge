@@ -87,6 +87,17 @@ export default function LoginPage() {
         {/* Right panel */}
         <div className="bg-white p-8 md:p-10 flex flex-col justify-center">
 
+          {/* Back to landing */}
+<Link
+  href="/"
+  className="flex items-center gap-1.5 text-[#888780] hover:text-white transition text-xs mb-6 w-fit"
+>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <path d="M19 12H5m0 0l7 7m-7-7l7-7"
+      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+  Back to home
+</Link>
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 md:hidden">
             <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
