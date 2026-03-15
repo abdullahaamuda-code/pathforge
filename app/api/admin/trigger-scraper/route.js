@@ -1,3 +1,6 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST() {
   try {
     const repoOwner = process.env.GITHUB_REPO_OWNER;
@@ -31,10 +34,3 @@ export async function POST() {
     return Response.json({ error: err.message }, { status: 500 });
   }
 }
-```
-
-Add these to `.env.local` and Vercel for the scraper trigger:
-```
-GITHUB_TOKEN=your_github_personal_access_token
-GITHUB_REPO_OWNER=your_github_username
-GITHUB_REPO_NAME=pathforge
