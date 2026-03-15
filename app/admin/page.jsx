@@ -297,26 +297,9 @@ export default function AdminPage() {
       </div>
 
       {/* Action message */}
-    {actionMsg && (
+{actionMsg && (
   <div className={`mx-4 mt-3 border text-xs px-3 py-2 rounded-lg ${msgColors[actionType]}`}>
-    {actionMsg.startsWith("Scraper") && actionType === "success" ? (
-      <span>
-        Scraper is running —{" "}
-        
-          href="https://github.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-          onClick={(e) => {
-            e.preventDefault();
-            const url = actionMsg.split(" ").find((w) => w.startsWith("https://github"));
-            if (url) window.open(url, "_blank");
-          }}
-        >
-          View on GitHub →
-        </a>
-      </span>
-    ) : actionMsg}
+    {actionMsg}
   </div>
 )}
       {/* Tabs */}
