@@ -97,16 +97,15 @@ export default function LandingPage() {
       lang === "en"
         ? "AI-powered career guidance"
         : "Orientation de carrière propulsée par l’IA",
-    heroLine1:
-      lang === "en" ? "Discover your path." : "Découvre ta voie.",
-    heroLine2:
-      lang === "en" ? "Build your future." : "Construis ton avenir.",
+    heroLine1: lang === "en" ? "Discover your path." : "Découvre ta voie.",
+    heroLine2: lang === "en" ? "Build your future." : "Construis ton avenir.",
     heroSub:
       lang === "en"
         ? "From secondary school to your first job — PathForge gives you a personalized roadmap, matched opportunities, and an AI mentor that actually knows your situation."
         : "Du secondaire à ton premier emploi — PathForge te donne une feuille de route personnalisée, des opportunités adaptées et un mentor IA qui comprend vraiment ta situation.",
     navSignIn: lang === "en" ? "Sign in" : "Connexion",
-    navGetStarted: lang === "en" ? "Get started free" : "Commencer gratuitement",
+    navGetStarted:
+      lang === "en" ? "Get started free" : "Commencer gratuitement",
     heroPrimaryCta:
       lang === "en" ? "Get started — it's free" : "Commencer — c’est gratuit",
     heroSecondaryCta:
@@ -229,20 +228,45 @@ export default function LandingPage() {
       <nav className="relative z-10 flex items-center justify-between px-6 md:px-10 py-4 border-b border-[#2C2C2A]">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
-    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
-    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
-    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-  </svg>
-</div>
-           
-              <path
-                d="M6 10.5 L12 10.5"
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+                stroke="white"
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+              <polygon
+                points="12,5 14.5,11.5 12,10 9.5,11.5"
+                fill="white"
+              />
+              <circle
+                cx="12"
+                cy="18"
+                r="1.5"
+                fill="white"
+                opacity="0.5"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="7"
+                y2="12"
                 stroke="white"
                 strokeWidth="1.5"
                 strokeLinecap="round"
+                opacity="0.5"
+              />
+              <line
+                x1="17"
+                y1="12"
+                x2="19"
+                y2="12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.5"
               />
             </svg>
           </div>
@@ -324,10 +348,6 @@ export default function LandingPage() {
             <p className="text-[#888780] text-[9px]">High growth</p>
           </div>
         </div>
-        {/* Removed the second mobile card that was blocking text */}
-        {/* <div className="md:hidden absolute left-4 top-32 float-3 opacity-80">
-          ...
-        </div> */}
 
         <div className="scroll-animate">
           <p className="text-[#7F77DD] text-xs font-medium tracking-widest uppercase mb-4">
@@ -512,14 +532,20 @@ export default function LandingPage() {
               title: "AI career roadmap",
               sub: "Personalized plan based on your stage, country, and goals",
               icon: (
-                <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5" />
+                <path
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                  strokeWidth="1.5"
+                />
               ),
             },
             {
               title: "Opportunity matching",
               sub: "Jobs, grants, and courses scored with match percentages",
               icon: (
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5" />
+                <path
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  strokeWidth="1.5"
+                />
               ),
             },
             {
@@ -618,20 +644,46 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="px-6 md:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-<div className="w-6 h-6 bg-[#7F77DD] rounded-md flex items-center justify-center">
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
-    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
-    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
-    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-  </svg>
-</div>
-              <path
-                d="M6 10.5 L12 10.5"
+          <div className="w-6 h-6 bg-[#7F77DD] rounded-md flex items-center justify-center">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+                stroke="white"
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+              <polygon
+                points="12,5 14.5,11.5 12,10 9.5,11.5"
+                fill="white"
+              />
+              <circle
+                cx="12"
+                cy="18"
+                r="1.5"
+                fill="white"
+                opacity="0.5"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="7"
+                y2="12"
                 stroke="white"
                 strokeWidth="1.5"
                 strokeLinecap="round"
+                opacity="0.5"
+              />
+              <line
+                x1="17"
+                y1="12"
+                x2="19"
+                y2="12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.5"
               />
             </svg>
           </div>
