@@ -602,11 +602,3 @@ export default function AdminPage() {
     </div>
   );
 }
-```
-
-Add all the new env variables to Vercel and `.env.local`:
-```
-NEXT_PUBLIC_ADMIN_EMAIL=youremail@gmail.com
-GITHUB_TOKEN=your_github_pat
-GITHUB_REPO_OWNER=your_github_username
-GITHUB_REPO_NAME=pathforge
