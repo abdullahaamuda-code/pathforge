@@ -1,130 +1,131 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import React from "react";
-
-const steps = [
-  {
-    id: "language",
-    tag: "Language",
-    question: "What's your preferred language?",
-    sub: "PathForge works in both English and French.",
-    type: "single",
-    options: [
-      { value: "en", label: "English", sub: "Continue in English" },
-      { value: "fr", label: "Français", sub: "Continuer en français" },
-    ],
-  },
-  {
-    id: "stage",
-    tag: "Your stage",
-    question: "Where are you right now?",
-    sub: "This helps us tailor your roadmap to exactly where you are in life.",
-    type: "single",
-    options: [
-      { value: "secondary", label: "Secondary school", sub: "SS1, SS2, SS3 or equivalent" },
-      { value: "applicant", label: "University applicant", sub: "Preparing for JAMB, A-levels etc" },
-      { value: "undergraduate", label: "Undergraduate", sub: "Currently in university" },
-      { value: "graduate", label: "Graduate / job seeker", sub: "Finished school, building career" },
-    ],
-  },
-  {
-    id: "country",
-    tag: "Your location",
-    question: "Which country are you in?",
-    sub: "We use this to show you relevant local opportunities and salary ranges.",
-    type: "single",
-    options: [
-      { value: "Nigeria", label: "Nigeria", sub: "West Africa" },
-      { value: "Senegal", label: "Senegal", sub: "West Africa" },
-      { value: "Ghana", label: "Ghana", sub: "West Africa" },
-      { value: "Kenya", label: "Kenya", sub: "East Africa" },
-      { value: "South Africa", label: "South Africa", sub: "Southern Africa" },
-      { value: "Côte d'Ivoire", label: "Côte d'Ivoire", sub: "West Africa" },
-      { value: "United Kingdom", label: "United Kingdom", sub: "Europe" },
-      { value: "Other", label: "Other country", sub: "Rest of the world" },
-    ],
-  },
-  {
-    id: "interests",
-    tag: "Your interests",
-    question: "What areas excite you most?",
-    sub: "Pick up to 3. This shapes your career suggestions.",
-    type: "multi",
-    max: 3,
-    options: [
-      { value: "technology", label: "Technology", sub: "Software, AI, engineering" },
-      { value: "business", label: "Business", sub: "Finance, marketing, strategy" },
-      { value: "health", label: "Health & medicine", sub: "Medicine, pharmacy, nursing" },
-      { value: "creative", label: "Creative arts", sub: "Design, media, content" },
-      { value: "law", label: "Law & policy", sub: "Legal, governance, diplomacy" },
-      { value: "science", label: "Science & research", sub: "Biology, chemistry, physics" },
-      { value: "education", label: "Education", sub: "Teaching, curriculum, training" },
-      { value: "social", label: "Social impact", sub: "NGOs, development, community" },
-    ],
-  },
-  {
-    id: "field",
-    tag: "Your field",
-    question: "What is your current or most recent field of study?",
-    sub: "Pick the closest match to your course or subject area.",
-    type: "single",
-    options: [
-      { value: "engineering", label: "Engineering & technology", sub: "Computer science, electrical etc" },
-      { value: "medicine", label: "Medicine & health sciences", sub: "Medicine, pharmacy, nursing" },
-      { value: "business", label: "Business & economics", sub: "Accounting, finance, management" },
-      { value: "law", label: "Law", sub: "LLB, legal studies" },
-      { value: "arts", label: "Arts & humanities", sub: "English, history, philosophy" },
-      { value: "sciences", label: "Pure sciences", sub: "Biology, chemistry, physics" },
-      { value: "social_sciences", label: "Social sciences", sub: "Sociology, political science" },
-      { value: "education", label: "Education", sub: "Teaching, curriculum" },
-    ],
-  },
-  {
-    id: "skills",
-    tag: "Your existing skills",
-    question: "Which of these do you already have experience with?",
-    sub: "Be honest — this stops us suggesting things you already know. Pick all that apply.",
-    type: "multi",
-    max: 10,
-    options: [
-      { value: "microsoft_office", label: "Microsoft Office", sub: "Word, Excel, PowerPoint" },
-      { value: "public_speaking", label: "Public speaking", sub: "Presentations, debates" },
-      { value: "writing", label: "Writing", sub: "Essays, reports, content" },
-      { value: "python", label: "Python", sub: "Programming language" },
-      { value: "data_analysis", label: "Data analysis", sub: "Excel, SPSS, R" },
-      { value: "graphic_design", label: "Graphic design", sub: "Canva, Photoshop" },
-      { value: "social_media", label: "Social media", sub: "Content creation, management" },
-      { value: "research", label: "Research", sub: "Academic or market research" },
-      { value: "coding", label: "Web development", sub: "HTML, CSS, JavaScript" },
-      { value: "video_editing", label: "Video editing", sub: "Premiere, CapCut" },
-      { value: "none", label: "None yet", sub: "Starting from scratch" },
-    ],
-  },
-  {
-    id: "careerGoal",
-    tag: "Your goal",
-    question: "What's your biggest career goal right now?",
-    sub: "Be honest — there's no wrong answer.",
-    type: "single",
-    options: [
-      { value: "explore", label: "I'm still exploring", sub: "Help me figure out what suits me" },
-      { value: "skill", label: "Build specific skills", sub: "I know what I want to learn" },
-      { value: "job", label: "Get a job or internship", sub: "I'm actively looking" },
-      { value: "abroad", label: "Study or work abroad", sub: "Scholarships, programs, relocation" },
-    ],
-  },
-];
+import { t, interpolate } from "@/lib/i18n";
 
 export default function OnboardingPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState({});
   const [saving, setSaving] = useState(false);
+
+  const lang = answers.language || "en";
+
+  const steps = [
+    {
+      id: "language",
+      tag: "Language",
+      question: "What's your preferred language?",
+      sub: "PathForge works in both English and French.",
+      type: "single",
+      options: [
+        { value: "en", label: "English", sub: "Continue in English" },
+        { value: "fr", label: "Français", sub: "Continuer en français" },
+      ],
+    },
+    {
+      id: "stage",
+      tag: t(lang, "onboarding.stage"),
+      question: t(lang, "onboarding.stageQuestion"),
+      sub: t(lang, "onboarding.stageSub"),
+      type: "single",
+      options: [
+        { value: "secondary", label: t(lang, "onboarding.secondary"), sub: t(lang, "onboarding.secondarySub") },
+        { value: "applicant", label: t(lang, "onboarding.applicant"), sub: t(lang, "onboarding.applicantSub") },
+        { value: "undergraduate", label: t(lang, "onboarding.undergraduate"), sub: t(lang, "onboarding.undergraduateSub") },
+        { value: "graduate", label: t(lang, "onboarding.graduate"), sub: t(lang, "onboarding.graduateSub") },
+      ],
+    },
+    {
+      id: "country",
+      tag: t(lang, "onboarding.country"),
+      question: t(lang, "onboarding.countryQuestion"),
+      sub: t(lang, "onboarding.countrySub"),
+      type: "single",
+      options: [
+        { value: "Nigeria", label: "Nigeria", sub: "West Africa" },
+        { value: "Senegal", label: "Senegal", sub: "West Africa" },
+        { value: "Ghana", label: "Ghana", sub: "West Africa" },
+        { value: "Kenya", label: "Kenya", sub: "East Africa" },
+        { value: "South Africa", label: "South Africa", sub: "Southern Africa" },
+        { value: "Côte d'Ivoire", label: "Côte d'Ivoire", sub: "West Africa" },
+        { value: "United Kingdom", label: "United Kingdom", sub: "Europe" },
+        { value: "Other", label: lang === "fr" ? "Autre pays" : "Other country", sub: lang === "fr" ? "Reste du monde" : "Rest of the world" },
+      ],
+    },
+    {
+      id: "interests",
+      tag: t(lang, "onboarding.interests"),
+      question: t(lang, "onboarding.interestsQuestion"),
+      sub: t(lang, "onboarding.interestsSub"),
+      type: "multi",
+      max: 3,
+      options: [
+        { value: "technology", label: lang === "fr" ? "Technologie" : "Technology", sub: lang === "fr" ? "Logiciels, IA, ingénierie" : "Software, AI, engineering" },
+        { value: "business", label: lang === "fr" ? "Commerce" : "Business", sub: lang === "fr" ? "Finance, marketing, stratégie" : "Finance, marketing, strategy" },
+        { value: "health", label: lang === "fr" ? "Santé et médecine" : "Health & medicine", sub: lang === "fr" ? "Médecine, pharmacie, soins" : "Medicine, pharmacy, nursing" },
+        { value: "creative", label: lang === "fr" ? "Arts créatifs" : "Creative arts", sub: lang === "fr" ? "Design, médias, contenu" : "Design, media, content" },
+        { value: "law", label: lang === "fr" ? "Droit et politique" : "Law & policy", sub: lang === "fr" ? "Droit, gouvernance, diplomatie" : "Legal, governance, diplomacy" },
+        { value: "science", label: lang === "fr" ? "Sciences et recherche" : "Science & research", sub: lang === "fr" ? "Biologie, chimie, physique" : "Biology, chemistry, physics" },
+        { value: "education", label: lang === "fr" ? "Éducation" : "Education", sub: lang === "fr" ? "Enseignement, formation" : "Teaching, curriculum, training" },
+        { value: "social", label: lang === "fr" ? "Impact social" : "Social impact", sub: lang === "fr" ? "ONG, développement, communauté" : "NGOs, development, community" },
+      ],
+    },
+    {
+      id: "field",
+      tag: t(lang, "onboarding.field"),
+      question: t(lang, "onboarding.fieldQuestion"),
+      sub: t(lang, "onboarding.fieldSub"),
+      type: "single",
+      options: [
+        { value: "engineering", label: lang === "fr" ? "Ingénierie et technologie" : "Engineering & technology", sub: lang === "fr" ? "Informatique, électronique etc" : "Computer science, electrical etc" },
+        { value: "medicine", label: lang === "fr" ? "Médecine et sciences de la santé" : "Medicine & health sciences", sub: lang === "fr" ? "Médecine, pharmacie, soins" : "Medicine, pharmacy, nursing" },
+        { value: "business", label: lang === "fr" ? "Commerce et économie" : "Business & economics", sub: lang === "fr" ? "Comptabilité, finance, gestion" : "Accounting, finance, management" },
+        { value: "law", label: lang === "fr" ? "Droit" : "Law", sub: lang === "fr" ? "Études juridiques" : "LLB, legal studies" },
+        { value: "arts", label: lang === "fr" ? "Arts et lettres" : "Arts & humanities", sub: lang === "fr" ? "Littérature, histoire, philosophie" : "English, history, philosophy" },
+        { value: "sciences", label: lang === "fr" ? "Sciences pures" : "Pure sciences", sub: lang === "fr" ? "Biologie, chimie, physique" : "Biology, chemistry, physics" },
+        { value: "social_sciences", label: lang === "fr" ? "Sciences sociales" : "Social sciences", sub: lang === "fr" ? "Sociologie, sciences politiques" : "Sociology, political science" },
+        { value: "education", label: lang === "fr" ? "Éducation" : "Education", sub: lang === "fr" ? "Enseignement, formation" : "Teaching, curriculum" },
+      ],
+    },
+    {
+      id: "skills",
+      tag: t(lang, "onboarding.skills"),
+      question: t(lang, "onboarding.skillsQuestion"),
+      sub: t(lang, "onboarding.skillsSub"),
+      type: "multi",
+      max: 10,
+      options: [
+        { value: "microsoft_office", label: "Microsoft Office", sub: "Word, Excel, PowerPoint" },
+        { value: "public_speaking", label: lang === "fr" ? "Prise de parole en public" : "Public speaking", sub: lang === "fr" ? "Présentations, débats" : "Presentations, debates" },
+        { value: "writing", label: lang === "fr" ? "Rédaction" : "Writing", sub: lang === "fr" ? "Essais, rapports, contenu" : "Essays, reports, content" },
+        { value: "python", label: "Python", sub: lang === "fr" ? "Langage de programmation" : "Programming language" },
+        { value: "data_analysis", label: lang === "fr" ? "Analyse de données" : "Data analysis", sub: "Excel, SPSS, R" },
+        { value: "graphic_design", label: lang === "fr" ? "Design graphique" : "Graphic design", sub: "Canva, Photoshop" },
+        { value: "social_media", label: lang === "fr" ? "Réseaux sociaux" : "Social media", sub: lang === "fr" ? "Création de contenu" : "Content creation, management" },
+        { value: "research", label: lang === "fr" ? "Recherche" : "Research", sub: lang === "fr" ? "Recherche académique ou marché" : "Academic or market research" },
+        { value: "coding", label: lang === "fr" ? "Développement web" : "Web development", sub: "HTML, CSS, JavaScript" },
+        { value: "video_editing", label: lang === "fr" ? "Montage vidéo" : "Video editing", sub: "Premiere, CapCut" },
+        { value: "none", label: lang === "fr" ? "Aucune pour l'instant" : "None yet", sub: lang === "fr" ? "Je commence de zéro" : "Starting from scratch" },
+      ],
+    },
+    {
+      id: "careerGoal",
+      tag: t(lang, "onboarding.goal"),
+      question: t(lang, "onboarding.goalQuestion"),
+      sub: t(lang, "onboarding.goalSub"),
+      type: "single",
+      options: [
+        { value: "explore", label: lang === "fr" ? "J'explore encore" : "I'm still exploring", sub: lang === "fr" ? "Aidez-moi à trouver ce qui me convient" : "Help me figure out what suits me" },
+        { value: "skill", label: lang === "fr" ? "Développer des compétences" : "Build specific skills", sub: lang === "fr" ? "Je sais ce que je veux apprendre" : "I know what I want to learn" },
+        { value: "job", label: lang === "fr" ? "Trouver un emploi ou stage" : "Get a job or internship", sub: lang === "fr" ? "Je cherche activement" : "I'm actively looking" },
+        { value: "abroad", label: lang === "fr" ? "Étudier ou travailler à l'étranger" : "Study or work abroad", sub: lang === "fr" ? "Bourses, programmes, relocation" : "Scholarships, programs, relocation" },
+      ],
+    },
+  ];
 
   const step = steps[currentStep];
   const total = steps.length;
@@ -162,50 +163,44 @@ export default function OnboardingPage() {
     return true;
   }
 
-async function handleNext() {
-  if (!canContinue()) return;
-
-  let nextStep = currentStep + 1;
-
-  // Skip field step if user is secondary school or applicant
-  if (steps[nextStep]?.id === "field" && 
+  async function handleNext() {
+    if (!canContinue()) return;
+    let nextStep = currentStep + 1;
+    if (steps[nextStep]?.id === "field" &&
       (answers.stage === "secondary" || answers.stage === "applicant")) {
-    nextStep = nextStep + 1;
-  }
-
-  if (nextStep < total) {
-    setCurrentStep(nextStep);
-  } else {
-    await handleFinish();
-  }
-}
-
-async function handleFinish() {
-  if (!user) return;
-  setSaving(true);
-  try {
-    await updateDoc(doc(db, "users", user.uid), {
-      language: answers.language || "en",
-      stage: answers.stage || "",
-      country: answers.country || "",
-      interests: answers.interests || [],
-      field: answers.field || "",
-      skills: answers.skills || [],
-      careerGoal: answers.careerGoal || "",
-      onboardingComplete: true,
-    });
-
-    // Route based on stage
-    if (answers.stage === "graduate") {
-      window.location.href = "/opportunities";
-    } else {
-      window.location.href = "/roadmap";
+      nextStep = nextStep + 1;
     }
-  } catch (err) {
-    console.error(err);
-    setSaving(false);
+    if (nextStep < total) {
+      setCurrentStep(nextStep);
+    } else {
+      await handleFinish();
+    }
   }
-}
+
+  async function handleFinish() {
+    if (!user) return;
+    setSaving(true);
+    try {
+      await updateDoc(doc(db, "users", user.uid), {
+        language: answers.language || "en",
+        stage: answers.stage || "",
+        country: answers.country || "",
+        interests: answers.interests || [],
+        field: answers.field || "",
+        skills: answers.skills || [],
+        careerGoal: answers.careerGoal || "",
+        onboardingComplete: true,
+      });
+      if (answers.stage === "graduate") {
+        window.location.href = "/opportunities";
+      } else {
+        window.location.href = "/roadmap";
+      }
+    } catch (err) {
+      console.error(err);
+      setSaving(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#080a0f] flex items-center justify-center px-4 py-10">
@@ -222,7 +217,9 @@ async function handleFinish() {
             </div>
             <span className="text-white font-medium text-sm">PathForge</span>
           </div>
-          <span className="text-[#444441] text-xs">Step {currentStep + 1} of {total}</span>
+          <span className="text-[#444441] text-xs">
+            {interpolate(t(lang, "onboarding.stepOf"), { current: currentStep + 1, total })}
+          </span>
         </div>
 
         {/* Progress bar */}
@@ -241,7 +238,7 @@ async function handleFinish() {
         </div>
 
         {/* Options */}
-        <div className={`grid ${step.options.length > 4 ? "grid-cols-2" : "grid-cols-2"} gap-3 mb-10`}>
+        <div className="grid grid-cols-2 gap-3 mb-10">
           {step.options.map((opt) => (
             <button
               key={opt.value}
@@ -265,29 +262,29 @@ async function handleFinish() {
         {/* Navigation */}
         <div className="flex items-center justify-between">
           <button
-  onClick={() => {
-    let prevStep = currentStep - 1;
-    if (steps[prevStep]?.id === "field" &&
-        (answers.stage === "secondary" || answers.stage === "applicant")) {
-      prevStep = prevStep - 1;
-    }
-    setCurrentStep(Math.max(0, prevStep));
-  }}
-  disabled={currentStep === 0}
-  className="border border-[#2C2C2A] text-[#888780] rounded-lg px-5 py-2.5 text-sm disabled:opacity-30 hover:border-[#444441] transition"
->
-  Back
-</button>
+            onClick={() => {
+              let prevStep = currentStep - 1;
+              if (steps[prevStep]?.id === "field" &&
+                (answers.stage === "secondary" || answers.stage === "applicant")) {
+                prevStep = prevStep - 1;
+              }
+              setCurrentStep(Math.max(0, prevStep));
+            }}
+            disabled={currentStep === 0}
+            className="border border-[#2C2C2A] text-[#888780] rounded-lg px-5 py-2.5 text-sm disabled:opacity-30 hover:border-[#444441] transition"
+          >
+            {t(lang, "onboarding.back")}
+          </button>
           <button
             onClick={handleNext}
             disabled={!canContinue() || saving}
             className="bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg px-6 py-2.5 text-sm font-medium transition disabled:opacity-40"
           >
             {saving
-              ? "Saving..."
+              ? t(lang, "onboarding.saving")
               : currentStep === total - 1
-              ? "Build my path →"
-              : "Continue →"}
+              ? t(lang, "onboarding.buildMyPath")
+              : t(lang, "onboarding.continue")}
           </button>
         </div>
 
