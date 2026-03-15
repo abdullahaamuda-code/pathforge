@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getUser, getOpportunities, saveOpportunity, getSaved, saveUserOpportunities, getUserOpportunities } from "@/lib/firestore";
-import { fetchRemotiveJobs } from "@/lib/jobs";
+import { fetchJobs } from "@/lib/jobs";
 import Link from "next/link";
 import React from "react";
 
@@ -52,7 +52,7 @@ export default function OpportunitiesPage() {
       }
 
       const [jobs, scraped] = await Promise.all([
-        fetchRemotiveJobs(userData),
+        fetchJobs(userData),
         getOpportunities(),
       ]);
 
@@ -227,6 +227,16 @@ export default function OpportunitiesPage() {
                     </div>
                     <p className="text-white text-sm font-medium leading-snug">{opp.title}</p>
                     <p className="text-[#888780] text-xs mt-0.5">{opp.provider}</p>
+{opp.location && (
+  <p className="text-[#444441] text-[10px] mt-0.5 flex items-center gap-1">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+    {opp.isRemote ? "Remote" : opp.location}
+  </p>
+)}
                   </div>
                   {opp.score !== null && (
                     <div className="text-right flex-shrink-0">
