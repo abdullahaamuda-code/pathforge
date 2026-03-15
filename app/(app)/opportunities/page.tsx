@@ -292,7 +292,7 @@ export default function OpportunitiesPage() {
                 )}
 
                 <div className="flex items-center gap-3 mt-3 flex-wrap">
-                  
+                  <a
                     href={opp.url}
                     target="_blank"
                     rel="noopener noreferrer"
