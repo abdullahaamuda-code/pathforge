@@ -1,0 +1,36 @@
+name: Run Scrapers
+
+on:
+  schedule:
+    - cron: '0 2 */3 * *'  # Every 3 days at 2am UTC
+  workflow_dispatch:  # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 firebase-admin
+
+      - name: Run opportunity scraper
+        run: python scrapers/scrape_opportunities.py
+
+      - name: Run course scraper
+        run: python scrapers/scrape_courses.py
+
+      - name: Upload to Firestore
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+        run: python scrapers/upload_to_firestore.py
