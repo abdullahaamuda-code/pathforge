@@ -4,12 +4,15 @@ import { useState } from "react";
 import { auth } from "@/lib/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import Link from "next/link";
+import { t } from "@/lib/i18n";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const lang = typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en";
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -21,7 +24,10 @@ export default function ForgotPasswordPage() {
       });
       setSent(true);
     } catch (err) {
-      setError("No account found with that email address.");
+      setError(lang === "fr"
+        ? "Aucun compte trouvé avec cette adresse email."
+        : "No account found with that email address."
+      );
     } finally {
       setLoading(false);
     }
@@ -37,19 +43,22 @@ export default function ForgotPasswordPage() {
                 stroke="#7F77DD" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <h2 className="text-white text-xl font-medium mb-2">Check your email</h2>
+          <h2 className="text-white text-xl font-medium mb-2">{t(lang, "auth.checkEmail")}</h2>
           <p className="text-[#888780] text-sm leading-relaxed mb-2">
-            We sent a password reset link to{" "}
+            {t(lang, "auth.resetSent")}{" "}
             <span className="text-white">{email}</span>.
           </p>
           <p className="text-[#888780] text-sm leading-relaxed mb-8">
-            Click the link to reset your password then sign in.
+            {lang === "fr"
+              ? "Cliquez sur le lien pour réinitialiser votre mot de passe puis connectez-vous."
+              : "Click the link to reset your password then sign in."
+            }
           </p>
           <Link
             href="/login"
             className="inline-block bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg px-8 py-2.5 text-sm font-medium transition"
           >
-            Back to sign in
+            {t(lang, "auth.backToHome")}
           </Link>
         </div>
       </div>
@@ -67,7 +76,7 @@ export default function ForgotPasswordPage() {
             <path d="M19 12H5m0 0l7 7m-7-7l7-7"
               stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Back to sign in
+          {t(lang, "auth.signIn")}
         </Link>
 
         <div className="bg-[#0f1117] border border-white/10 rounded-2xl p-8">
@@ -81,9 +90,12 @@ export default function ForgotPasswordPage() {
             <span className="text-white font-medium text-sm">PathForge</span>
           </div>
 
-          <h2 className="text-white text-xl font-medium mb-2">Reset your password</h2>
+          <h2 className="text-white text-xl font-medium mb-2">{t(lang, "auth.resetPassword")}</h2>
           <p className="text-[#888780] text-sm mb-8">
-            Enter your email and we'll send you a reset link.
+            {lang === "fr"
+              ? "Entrez votre email et nous vous enverrons un lien de réinitialisation."
+              : "Enter your email and we'll send you a reset link."
+            }
           </p>
 
           {error && (
@@ -95,7 +107,7 @@ export default function ForgotPasswordPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-[11px] font-medium text-[#888780] tracking-wider uppercase mb-1.5">
-                Email
+                {t(lang, "auth.email")}
               </label>
               <input
                 id="email"
@@ -113,7 +125,10 @@ export default function ForgotPasswordPage() {
               disabled={loading}
               className="w-full bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg py-3 text-sm font-medium transition disabled:opacity-50"
             >
-              {loading ? "Sending..." : "Send reset link"}
+              {loading
+                ? (lang === "fr" ? "Envoi en cours..." : "Sending...")
+                : t(lang, "auth.sendResetLink")
+              }
             </button>
           </form>
         </div>
