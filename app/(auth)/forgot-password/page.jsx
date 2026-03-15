@@ -82,17 +82,20 @@ export default function ForgotPasswordPage() {
           {t(lang, "auth.signIn")}
         </Link>
 
-        <div className="bg-[#0f1117] border border-white/10 rounded-2xl p-8">
-          <div className="flex items-center gap-2.5 mb-8">
-            <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
-    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
-    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
-    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+<div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+  <svg
+    className="w-4 h-4"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5" />
+    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white" />
+    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5" />
+    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
   </svg>
 </div>
+
             <span className="text-white font-medium text-sm">PathForge</span>
           </div>
 
