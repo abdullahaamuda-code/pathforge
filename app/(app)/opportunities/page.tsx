@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getUser, getOpportunities, saveOpportunity, getSaved, saveUserOpportunities, getUserOpportunities, saveUserJobs, getUserJobs } from "@/lib/firestore";
-import { fetchJobs } from "@/lib/jobs";
 import Link from "next/link";
 import React from "react";
 
@@ -63,7 +62,13 @@ async function loadOpportunities() {
       jobs = cachedJobs;
     } else {
       // Fetch fresh from JSearch (uses 1 API call)
-      jobs = await fetchJobs(userData);
+      const jobRes = await fetch("/api/fetch-jobs", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ user: userData }),
+});
+const jobData = await jobRes.json();
+jobs = jobData.jobs || [];
       // Save to 30-day cache
       if (jobs.length > 0) {
         await saveUserJobs(user.uid, jobs);
