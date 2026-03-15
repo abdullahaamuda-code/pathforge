@@ -143,7 +143,29 @@ const [lang, setLang] = useState(
 
         {/* Right panel */}
         <div className="bg-white p-8 md:p-10 flex flex-col justify-center">
-
+{/* Language toggle */}
+<div className="flex items-center gap-1 mb-6">
+  <button
+    onClick={() => setLang("en")}
+    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+      lang === "en"
+        ? "bg-[#534AB7] text-white"
+        : "text-gray-400 hover:text-gray-600"
+    }`}
+  >
+    <span>🇬🇧</span> EN
+  </button>
+  <button
+    onClick={() => setLang("fr")}
+    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+      lang === "fr"
+        ? "bg-[#534AB7] text-white"
+        : "text-gray-400 hover:text-gray-600"
+    }`}
+  >
+    <span>🇫🇷</span> FR
+  </button>
+</div>
           {/* Back to landing */}
           <Link
             href="/"
