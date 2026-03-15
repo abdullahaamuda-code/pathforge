@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { t } from "@/lib/i18n";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,8 +17,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
 
+  // Detect browser language for auth pages
+  const lang = typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en";
+
   useEffect(() => {
-    // Show success message if redirected from email verification
     if (searchParams.get("verified") === "true") {
       setVerified(true);
     }
@@ -33,7 +36,10 @@ export default function LoginPage() {
       const result = await signInWithEmailAndPassword(auth, email, password);
 
       if (!result.user.emailVerified) {
-        setError("Please verify your email before signing in. Check your inbox.");
+        setError(lang === "fr"
+          ? "Veuillez vérifier votre email avant de vous connecter. Vérifiez votre boîte de réception."
+          : "Please verify your email before signing in. Check your inbox."
+        );
         setLoading(false);
         return;
       }
@@ -45,7 +51,7 @@ export default function LoginPage() {
       window.location.href = destination;
     } catch (err) {
       console.error(err);
-      setError("Invalid email or password");
+      setError(lang === "fr" ? "Email ou mot de passe invalide" : "Invalid email or password");
       setLoading(false);
     }
   }
@@ -66,38 +72,50 @@ export default function LoginPage() {
             <span className="text-white font-medium text-base tracking-tight">PathForge</span>
           </div>
           <div>
-            <p className="text-[#7F77DD] text-xs font-medium tracking-widest uppercase mb-3">Welcome back</p>
+            <p className="text-[#7F77DD] text-xs font-medium tracking-widest uppercase mb-3">
+              {t(lang, "auth.welcomeBack")}
+            </p>
             <h1 className="text-white text-2xl font-medium leading-snug tracking-tight mb-4">
-              Your path is<br />waiting for you.
+              {lang === "fr" ? "Votre chemin vous" : "Your path is"}<br />
+              {lang === "fr" ? "attend." : "waiting for you."}
             </h1>
             <p className="text-[#888780] text-sm leading-relaxed">
-              Sign in to continue building your personalized career roadmap and discover opportunities matched to your profile.
+              {lang === "fr"
+                ? "Connectez-vous pour continuer à construire votre feuille de route et découvrir des opportunités adaptées à votre profil."
+                : "Sign in to continue building your personalized career roadmap and discover opportunities matched to your profile."
+              }
             </p>
             <div className="flex flex-wrap gap-2 mt-6">
-              {["Personalized roadmap", "AI mentor", "Opportunity matching", "Gap analysis"].map((tag) => (
+              {lang === "fr"
+                ? ["Feuille de route", "Mentor IA", "Opportunités", "Analyse des lacunes"]
+                : ["Personalized roadmap", "AI mentor", "Opportunity matching", "Gap analysis"]
+              }.map((tag) => (
                 <span key={tag} className="text-[11px] px-3 py-1 rounded-full border border-[#2C2C2A] text-[#B4B2A9]">
                   {tag}
                 </span>
               ))}
             </div>
           </div>
-          <p className="text-[#444441] text-xs">Trusted by students across Africa and beyond</p>
+          <p className="text-[#444441] text-xs">
+            {lang === "fr" ? "Utilisé par des étudiants à travers l'Afrique et au-delà" : "Trusted by students across Africa and beyond"}
+          </p>
         </div>
 
         {/* Right panel */}
         <div className="bg-white p-8 md:p-10 flex flex-col justify-center">
 
           {/* Back to landing */}
-<Link
-  href="/"
-  className="flex items-center gap-1.5 text-[#888780] hover:text-white transition text-xs mb-6 w-fit"
->
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-    <path d="M19 12H5m0 0l7 7m-7-7l7-7"
-      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-  Back to home
-</Link>
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-gray-400 hover:text-gray-700 transition text-xs mb-6 w-fit"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5m0 0l7 7m-7-7l7-7"
+                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            {t(lang, "auth.backToHome")}
+          </Link>
+
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 md:hidden">
             <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
@@ -109,16 +127,15 @@ export default function LoginPage() {
             <span className="text-gray-900 font-medium text-sm">PathForge</span>
           </div>
 
-          <h2 className="text-xl font-medium text-gray-900 mb-1">Welcome back</h2>
-          <p className="text-sm text-gray-500 mb-6">Sign in to continue your journey</p>
+          <h2 className="text-xl font-medium text-gray-900 mb-1">{t(lang, "auth.welcomeBack")}</h2>
+          <p className="text-sm text-gray-500 mb-6">{t(lang, "auth.continueJourney")}</p>
 
-          {/* Verification success banner */}
           {verified && (
             <div className="bg-green-50 border border-green-200 text-green-700 text-xs rounded-lg px-4 py-3 mb-4 flex items-center gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              Email verified successfully. You can now sign in.
+              {t(lang, "auth.emailVerified")}
             </div>
           )}
 
@@ -131,7 +148,7 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-[11px] font-medium text-gray-400 tracking-wider uppercase mb-1.5">
-                Email
+                {t(lang, "auth.email")}
               </label>
               <input
                 id="email"
@@ -146,7 +163,7 @@ export default function LoginPage() {
             </div>
             <div>
               <label className="block text-[11px] font-medium text-gray-400 tracking-wider uppercase mb-1.5">
-                Password
+                {t(lang, "auth.password")}
               </label>
               <input
                 id="password"
@@ -155,13 +172,13 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Your password"
+                placeholder={lang === "fr" ? "Votre mot de passe" : "Your password"}
                 className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-[#7F77DD] focus:ring-2 focus:ring-[#EEEDFE] transition"
               />
             </div>
             <div className="flex justify-end">
               <Link href="/forgot-password" className="text-xs text-[#534AB7] hover:underline">
-                Forgot password?
+                {t(lang, "auth.forgotPassword")}
               </Link>
             </div>
             <button
@@ -169,13 +186,18 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg py-3 text-sm font-medium transition disabled:opacity-50"
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading
+                ? (lang === "fr" ? "Connexion en cours..." : "Signing in...")
+                : t(lang, "auth.signIn")
+              }
             </button>
           </form>
 
           <p className="text-xs text-gray-400 text-center mt-6">
-            Don't have an account?{" "}
-            <Link href="/signup" className="text-[#534AB7] hover:underline">Create one</Link>
+            {t(lang, "auth.noAccount")}{" "}
+            <Link href="/signup" className="text-[#534AB7] hover:underline">
+              {t(lang, "auth.createOne")}
+            </Link>
           </p>
         </div>
       </div>
