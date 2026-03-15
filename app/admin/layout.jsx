@@ -38,8 +38,3 @@ export default function AdminLayout({ children }) {
 
   return <>{children}</>;
 }
-```
-
-Also add to `.env.local` and Vercel:
-```
-NEXT_PUBLIC_ADMIN_EMAIL=youremail@gmail.com
