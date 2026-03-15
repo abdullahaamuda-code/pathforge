@@ -294,7 +294,7 @@ export default function OpportunitiesPage() {
     { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
     { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
   ].map((item) => {
-    const isActive = item.href === "/dashboard";
+    const isActive = item.href === "/opportunities";
     return (
       <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
