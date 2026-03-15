@@ -299,7 +299,8 @@ const translations = {
     ctaSub:
       "Rejoins les étudiants d’Afrique et du monde qui construisent déjà leur avenir avec PathForge",
     ctaButton: "Crée ton compte gratuit",
-    footerBuilt: "© 2025. Conçu pour les étudiants du monde entier.",
+    footerBuilt:
+      "© 2025. Conçu pour les étudiants du monde entier.",
     footerPrivacy: "Confidentialité",
     footerTerms: "Conditions",
     footerContact: "Contact",
@@ -570,12 +571,13 @@ export default function LandingPage() {
 
       {/* Hero */}
       <div className="relative z-10 max-w-3xl mx-auto px-6 pt-20 md:pt-24 pb-20 text-center">
-        {/* Floating cards — desktop only */}
         <div className="hidden md:block absolute left-0 top-16 float-1">
           <div className="bg-[#0f1117] border border-[#2C2C2A] rounded-xl p-3 text-left w-44">
             <p className="text-[#7F77DD] text-[10px] mb-1">92% match</p>
             <p className="text-white text-xs font-medium">Software Engineer</p>
-            <p className="text-[#888780] text-[10px]">High growth · 2–3 years</p>
+            <p className="text-[#888780] text-[10px]">
+              High growth · 2–3 years
+            </p>
           </div>
         </div>
         <div className="hidden md:block absolute right-0 top-32 float-2">
@@ -591,7 +593,9 @@ export default function LandingPage() {
           <div className="bg-[#0f1117] border border-[#2C2C2A] rounded-xl p-3 text-left w-44">
             <p className="text-[#7F77DD] text-[10px] mb-1">Skill gap closed</p>
             <p className="text-white text-xs font-medium">Python added</p>
-            <p className="text-[#888780] text-[10px]">+43 new opportunities</p>
+            <p className="text-[#888780] text-[10px]">
+              +43 new opportunities
+            </p>
           </div>
         </div>
 
