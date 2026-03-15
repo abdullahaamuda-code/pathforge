@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     try {
       await sendPasswordResetEmail(auth, email, {
-        url: "https://pathforge-inky.vercel.app/login",
+        url: "https://pathforge-app.vercel.app/login",
       });
       setSent(true);
     } catch (err) {
