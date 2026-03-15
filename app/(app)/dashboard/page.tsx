@@ -6,7 +6,7 @@ import { getUser, getRoadmap } from "@/lib/firestore";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
-import React from "react";
+import { t, interpolate } from "@/lib/i18n";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -39,28 +39,29 @@ export default function DashboardPage() {
     window.location.href = "/login";
   }
 
+  const lang = profile?.language || "en";
   const topPath = roadmap?.careerPaths?.[0];
   const skillGapCount = roadmap?.skillGaps?.length || 0;
   const quickWin = roadmap?.quickWins?.[0];
 
-  const today = new Date().toLocaleDateString("en-GB", {
+  const today = new Date().toLocaleDateString(lang === "fr" ? "fr-FR" : "en-GB", {
     weekday: "long",
     day: "numeric",
     month: "long",
   });
 
   const stageLabel = {
-    secondary: "Secondary school",
-    applicant: "University applicant",
-    undergraduate: "Undergraduate",
-    graduate: "Graduate",
+    secondary: lang === "fr" ? "Lycée" : "Secondary school",
+    applicant: lang === "fr" ? "Candidat à l'université" : "University applicant",
+    undergraduate: lang === "fr" ? "Étudiant" : "Undergraduate",
+    graduate: lang === "fr" ? "Diplômé" : "Graduate",
   };
 
   const greeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 17) return "Good afternoon";
-    return "Good evening";
+    if (hour < 12) return t(lang, "dashboard.goodMorning");
+    if (hour < 17) return t(lang, "dashboard.goodAfternoon");
+    return t(lang, "dashboard.goodEvening");
   };
 
   if (loading) {
@@ -91,20 +92,16 @@ export default function DashboardPage() {
           <span className="text-white font-medium text-sm">PathForge</span>
         </div>
 
-        {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-6">
           <Link href="/dashboard" className="text-white text-xs font-medium">Dashboard</Link>
-          <Link href="/roadmap" className="text-[#888780] text-xs hover:text-white transition">Roadmap</Link>
-          <Link href="/opportunities" className="text-[#888780] text-xs hover:text-white transition">Opportunities</Link>
-          <Link href="/saved" className="text-[#888780] text-xs hover:text-white transition">Saved</Link>
-          <Link href="/mentor" className="text-[#888780] text-xs hover:text-white transition">AI Mentor</Link>
+          <Link href="/roadmap" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "nav.roadmap")}</Link>
+          <Link href="/opportunities" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "dashboard.opportunities")}</Link>
+          <Link href="/saved" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "dashboard.saved")}</Link>
+          <Link href="/mentor" className="text-[#888780] text-xs hover:text-white transition">{t(lang, "dashboard.aiMentor")}</Link>
         </div>
 
-        <button
-          onClick={handleSignOut}
-          className="text-[#444441] text-xs hover:text-[#888780] transition"
-        >
-          Sign out
+        <button onClick={handleSignOut} className="text-[#444441] text-xs hover:text-[#888780] transition">
+          {t(lang, "dashboard.signOut")}
         </button>
       </div>
 
@@ -126,12 +123,11 @@ export default function DashboardPage() {
         {/* Top two cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 
-          {/* Top career match */}
           {topPath ? (
             <Link href="/roadmap" className="block">
               <div className="border border-[#7F77DD]/20 bg-[#1a1830] rounded-xl p-5 hover:border-[#7F77DD]/40 transition h-full">
                 <p className="text-[#7F77DD] text-[10px] font-medium tracking-widest uppercase mb-3">
-                  Top career match
+                  {t(lang, "dashboard.topCareerMatch")}
                 </p>
                 <p className="text-white text-base font-medium mb-1">{topPath.title}</p>
                 <p className="text-[#888780] text-xs mb-4">
@@ -139,7 +135,7 @@ export default function DashboardPage() {
                 </p>
                 <div className="flex items-end justify-between">
                   <p className="text-[#7F77DD] text-3xl font-medium">{topPath.matchScore}%</p>
-                  <span className="text-[#7F77DD] text-xs">View roadmap →</span>
+                  <span className="text-[#7F77DD] text-xs">{t(lang, "dashboard.viewRoadmap")}</span>
                 </div>
               </div>
             </Link>
@@ -147,27 +143,30 @@ export default function DashboardPage() {
             <Link href="/roadmap" className="block">
               <div className="border border-[#2C2C2A] bg-[#0f1117] rounded-xl p-5 hover:border-[#444441] transition h-full">
                 <p className="text-[#444441] text-[10px] font-medium tracking-widest uppercase mb-3">
-                  Career roadmap
+                  {t(lang, "nav.roadmap")}
                 </p>
-                <p className="text-white text-sm font-medium mb-2">No roadmap yet</p>
-                <p className="text-[#888780] text-xs">Generate your personalized career roadmap</p>
-                <p className="text-[#7F77DD] text-xs mt-4">Generate now →</p>
+                <p className="text-white text-sm font-medium mb-2">
+                  {lang === "fr" ? "Pas encore de feuille de route" : "No roadmap yet"}
+                </p>
+                <p className="text-[#888780] text-xs">
+                  {lang === "fr" ? "Générez votre feuille de route personnalisée" : "Generate your personalized career roadmap"}
+                </p>
+                <p className="text-[#7F77DD] text-xs mt-4">{t(lang, "dashboard.generateNow")}</p>
               </div>
             </Link>
           )}
 
-          {/* Skill gaps */}
           {roadmap ? (
             <Link href="/roadmap" className="block">
               <div className="border border-[#2C2C2A] bg-[#0f1117] rounded-xl p-5 hover:border-[#444441] transition h-full">
                 <p className="text-[#444441] text-[10px] font-medium tracking-widest uppercase mb-3">
-                  Skill gaps
+                  {t(lang, "dashboard.skillGaps")}
                 </p>
                 <p className="text-white text-base font-medium mb-1">
-                  {skillGapCount} gap{skillGapCount !== 1 ? "s" : ""} identified
+                  {interpolate(t(lang, "dashboard.gapsIdentified"), { count: skillGapCount })}
                 </p>
                 <p className="text-[#888780] text-xs mb-4">
-                  Close these to unlock more opportunities matched to you
+                  {t(lang, "dashboard.closeGaps")}
                 </p>
                 <div className="h-1 bg-[#2C2C2A] rounded-full mb-3">
                   <div
@@ -175,15 +174,19 @@ export default function DashboardPage() {
                     style={{ width: `${Math.max(10, 100 - skillGapCount * 20)}%` }}
                   />
                 </div>
-                <span className="text-[#7F77DD] text-xs">See what to learn →</span>
+                <span className="text-[#7F77DD] text-xs">
+                  {lang === "fr" ? "Voir quoi apprendre" : "See what to learn"}
+                </span>
               </div>
             </Link>
           ) : (
             <div className="border border-[#2C2C2A] bg-[#0f1117] rounded-xl p-5 h-full">
               <p className="text-[#444441] text-[10px] font-medium tracking-widest uppercase mb-3">
-                Skill gaps
+                {t(lang, "dashboard.skillGaps")}
               </p>
-              <p className="text-[#888780] text-xs">Generate your roadmap to see your skill gaps</p>
+              <p className="text-[#888780] text-xs">
+                {lang === "fr" ? "Générez votre feuille de route pour voir vos lacunes" : "Generate your roadmap to see your skill gaps"}
+              </p>
             </div>
           )}
         </div>
@@ -191,24 +194,28 @@ export default function DashboardPage() {
         {/* Quick links */}
         <div className="mb-4">
           <p className="text-[#444441] text-[10px] font-medium tracking-widest uppercase mb-3">
-            Quick links
+            {t(lang, "dashboard.quickLinks")}
           </p>
           <div className="grid grid-cols-4 gap-3">
             {[
               {
-                label: "My roadmap", href: "/roadmap",
+                label: t(lang, "dashboard.myRoadmap"),
+                href: "/roadmap",
                 icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/>
               },
               {
-                label: "Opportunities", href: "/opportunities",
+                label: t(lang, "dashboard.opportunities"),
+                href: "/opportunities",
                 icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/>
               },
               {
-                label: "Saved", href: "/saved",
+                label: t(lang, "dashboard.saved"),
+                href: "/saved",
                 icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/>
               },
               {
-                label: "AI mentor", href: "/mentor",
+                label: t(lang, "dashboard.aiMentor"),
+                href: "/mentor",
                 icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/>
               },
             ].map((item) => (
@@ -226,42 +233,41 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick win of the day */}
+        {/* Quick win */}
         {quickWin && (
           <div className="border border-[#2C2C2A] bg-[#0f1117] rounded-xl p-5 mb-4">
             <p className="text-[#444441] text-[10px] font-medium tracking-widest uppercase mb-2">
-              Quick win for this week
+              {t(lang, "dashboard.quickWin")}
             </p>
             <p className="text-[#B4B2A9] text-sm leading-relaxed">{quickWin}</p>
           </div>
         )}
 
         {/* Mobile nav */}
-<div className="fixed bottom-0 left-0 right-0 border-t border-[#2C2C2A] bg-[#080a0f] px-6 py-3 flex items-center justify-around md:hidden z-10">
-  {[
-    { label: "Home", href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
-    { label: "Roadmap", href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
-    { label: "Explore", href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
-    { label: "Saved", href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
-    { label: "Mentor", href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
-  ].map((item) => {
-    const isActive = item.href === "/dashboard";
-    return (
-      <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={isActive ? "#ffffff" : "#888780"}
-          strokeLinecap="round" strokeLinejoin="round">
-          {item.icon}
-        </svg>
-        <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
-          {item.label}
-        </span>
-      </Link>
-    );
-  })}
-</div>
+        <div className="fixed bottom-0 left-0 right-0 border-t border-[#2C2C2A] bg-[#080a0f] px-6 py-3 flex items-center justify-around md:hidden z-10">
+          {[
+            { label: t(lang, "nav.home"), href: "/dashboard", icon: <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10" strokeWidth="1.5"/> },
+            { label: t(lang, "nav.roadmap"), href: "/roadmap", icon: <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeWidth="1.5"/> },
+            { label: t(lang, "nav.explore"), href: "/opportunities", icon: <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeWidth="1.5"/> },
+            { label: t(lang, "nav.saved"), href: "/saved", icon: <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeWidth="1.5"/> },
+            { label: t(lang, "nav.mentor"), href: "/mentor", icon: <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" strokeWidth="1.5"/> },
+          ].map((item) => {
+            const isActive = item.href === "/dashboard";
+            return (
+              <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke={isActive ? "#ffffff" : "#888780"}
+                  strokeLinecap="round" strokeLinejoin="round">
+                  {item.icon}
+                </svg>
+                <span className={`text-[10px] font-medium ${isActive ? "text-white" : "text-[#888780]"}`}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
 
-        {/* Bottom padding for mobile nav */}
         <div className="h-20 md:hidden" />
 
       </div>
