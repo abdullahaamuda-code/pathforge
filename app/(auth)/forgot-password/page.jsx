@@ -12,7 +12,11 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const lang = typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en";
+  const lang =
+    typeof navigator !== "undefined" &&
+    navigator.language?.startsWith("fr")
+      ? "fr"
+      : "en";
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,9 +28,10 @@ export default function ForgotPasswordPage() {
       });
       setSent(true);
     } catch (err) {
-      setError(lang === "fr"
-        ? "Aucun compte trouvé avec cette adresse email."
-        : "No account found with that email address."
+      setError(
+        lang === "fr"
+          ? "Aucun compte trouvé avec cette adresse email."
+          : "No account found with that email address."
       );
     } finally {
       setLoading(false);
@@ -37,26 +42,68 @@ export default function ForgotPasswordPage() {
     return (
       <div className="min-h-screen bg-[#080a0f] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5"/>
-    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white"/>
-    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5"/>
-    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-  </svg>
-</div>
-          <h2 className="text-white text-xl font-medium mb-2">{t(lang, "auth.checkEmail")}</h2>
-          <p className="text-[#888780] text-sm leading-relaxed mb-2">
-            {t(lang, "auth.resetSent")}{" "}
-            <span className="text-white">{email}</span>.
-          </p>
-          <p className="text-[#888780] text-sm leading-relaxed mb-8">
-            {lang === "fr"
-              ? "Cliquez sur le lien pour réinitialiser votre mot de passe puis connectez-vous."
-              : "Click the link to reset your password then sign in."
-            }
-          </p>
+          <div className="mx-auto mb-4 w-10 h-10 bg-[#7F77DD] rounded-xl flex items-center justify-center">
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+                stroke="white"
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+              <polygon
+                points="12,5 14.5,11.5 12,10 9.5,11.5"
+                fill="white"
+              />
+              <circle
+                cx="12"
+                cy="18"
+                r="1.5"
+                fill="white"
+                opacity="0.5"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="7"
+                y2="12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+              <line
+                x1="17"
+                y1="12"
+                x2="19"
+                y2="12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+            </svg>
+          </div>
+
+          <h2 className="text-white text-xl font-medium mb-2">
+            {t(lang, "auth.checkEmail")}
+          </h2>
+<p className="text-[#888780] text-sm leading-relaxed mb-2">
+  {t(lang, "auth.resetSent")}{" "}
+  <span className="text-white">{email}</span>.
+</p>
+<p className="text-[#888780] text-sm leading-relaxed mb-8">
+  {lang === "fr"
+    ? "Cliquez sur le lien pour réinitialiser votre mot de passe puis connectez-vous. Si vous ne le voyez pas, vérifiez aussi votre dossier spam."
+    : "Click the link to reset your password then sign in. If you don’t see the email, remember to also check your spam folder."
+  }
+</p>
+
           <Link
             href="/login"
             className="inline-block bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg px-8 py-2.5 text-sm font-medium transition"
@@ -76,71 +123,112 @@ export default function ForgotPasswordPage() {
           className="flex items-center gap-1.5 text-[#888780] hover:text-white transition text-xs mb-8 w-fit"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5m0 0l7 7m-7-7l7-7"
-              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M19 12H5m0 0l7 7m-7-7l7-7"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
           {t(lang, "auth.signIn")}
         </Link>
 
-<div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
-  <svg
-    className="w-4 h-4"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="1.5" opacity="0.5" />
-    <polygon points="12,5 14.5,11.5 12,10 9.5,11.5" fill="white" />
-    <circle cx="12" cy="18" r="1.5" fill="white" opacity="0.5" />
-    <line x1="5" y1="12" x2="7" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-    <line x1="17" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-  </svg>
-</div>
-
-            <span className="text-white font-medium text-sm">PathForge</span>
-          </div>
-
-          <h2 className="text-white text-xl font-medium mb-2">{t(lang, "auth.resetPassword")}</h2>
-          <p className="text-[#888780] text-sm mb-8">
-            {lang === "fr"
-              ? "Entrez votre email et nous vous enverrons un lien de réinitialisation."
-              : "Enter your email and we'll send you a reset link."
-            }
-          </p>
-
-          {error && (
-            <div className="bg-red-900/20 border border-red-800/40 text-red-400 text-xs rounded-lg px-4 py-3 mb-4">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-[11px] font-medium text-[#888780] tracking-wider uppercase mb-1.5">
-                {t(lang, "auth.email")}
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full bg-[#080a0f] border border-[#2C2C2A] rounded-lg px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] focus:ring-2 focus:ring-[#7F77DD]/20 transition"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg py-3 text-sm font-medium transition disabled:opacity-50"
+        {/* Logo row */}
+        <div className="flex items-center gap-2.5 mb-6">
+          <div className="w-7 h-7 bg-[#7F77DD] rounded-lg flex items-center justify-center">
+            <svg
+              className="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
             >
-              {loading
-                ? (lang === "fr" ? "Envoi en cours..." : "Sending...")
-                : t(lang, "auth.sendResetLink")
-              }
-            </button>
-          </form>
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+                stroke="white"
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+              <polygon
+                points="12,5 14.5,11.5 12,10 9.5,11.5"
+                fill="white"
+              />
+              <circle
+                cx="12"
+                cy="18"
+                r="1.5"
+                fill="white"
+                opacity="0.5"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="7"
+                y2="12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+              <line
+                x1="17"
+                y1="12"
+                x2="19"
+                y2="12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+            </svg>
+          </div>
+          <span className="text-white font-medium text-sm">PathForge</span>
         </div>
+
+        <h2 className="text-white text-xl font-medium mb-2">
+          {t(lang, "auth.resetPassword")}
+        </h2>
+        <p className="text-[#888780] text-sm mb-8">
+          {lang === "fr"
+            ? "Entrez votre email et nous vous enverrons un lien de réinitialisation."
+            : "Enter your email and we'll send you a reset link."}
+        </p>
+
+        {error && (
+          <div className="bg-red-900/20 border border-red-800/40 text-red-400 text-xs rounded-lg px-4 py-3 mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-[11px] font-medium text-[#888780] tracking-wider uppercase mb-1.5">
+              {t(lang, "auth.email")}
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="w-full bg-[#080a0f] border border-[#2C2C2A] rounded-lg px-4 py-3 text-sm text-white placeholder-[#444441] focus:outline-none focus:border-[#7F77DD] focus:ring-2 focus:ring-[#7F77DD]/20 transition"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#534AB7] hover:bg-[#4840a0] text-white rounded-lg py-3 text-sm font-medium transition disabled:opacity-50"
+          >
+            {loading
+              ? lang === "fr"
+                ? "Envoi en cours..."
+                : "Sending..."
+              : t(lang, "auth.sendResetLink")}
+          </button>
+        </form>
       </div>
     </div>
   );
