@@ -35,40 +35,53 @@ export default function OpportunitiesPage() {
     if (user) loadOpportunities();
   }, [user]);
 
-  async function loadOpportunities() {
-    setLoading(true);
-    setError("");
-    try {
-      const userData = await getUser(user.uid);
+async function loadOpportunities() {
+  setLoading(true);
+  setError("");
+  try {
+    const userData = await getUser(user.uid);
+    const saved = await getSaved(user.uid);
+    setSavedIds(new Set(saved.map((s) => s.opportunityId)));
 
-      const saved = await getSaved(user.uid);
-      setSavedIds(new Set(saved.map((s: any) => s.opportunityId)));
-
-      const cached = await getUserOpportunities(user.uid);
-      if (cached) {
-        setOpportunities(cached);
-        setLoading(false);
-        return;
-      }
-
-      const [jobs, scraped] = await Promise.all([
-        fetchJobs(userData),
-        getOpportunities(),
-      ]);
-
-      const all = [...jobs, ...scraped];
-      setOpportunities(all.map((o) => ({ ...o, score: null, label: null })));
+    // Check scored opportunities cache (24hr)
+    const cached = await getUserOpportunities(user.uid);
+    if (cached) {
+      setOpportunities(cached);
       setLoading(false);
-
-      setScoring(true);
-      await scoreAndCache(userData, all);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load opportunities. Please try again.");
-      setLoading(false);
+      return;
     }
-  }
 
+    // Check monthly jobs cache (30 days)
+    const cachedJobs = await getUserJobs(user.uid);
+
+    // Get scraped opportunities (grants, courses, fellowships)
+    const scraped = await getOpportunities();
+
+    let jobs = [];
+    if (cachedJobs && cachedJobs.length > 0) {
+      // Use cached jobs — don't hit JSearch API
+      jobs = cachedJobs;
+    } else {
+      // Fetch fresh from JSearch (uses 1 API call)
+      jobs = await fetchJobs(userData);
+      // Save to 30-day cache
+      if (jobs.length > 0) {
+        await saveUserJobs(user.uid, jobs);
+      }
+    }
+
+    const all = [...jobs, ...scraped];
+    setOpportunities(all.map((o) => ({ ...o, score: null, label: null })));
+    setLoading(false);
+
+    setScoring(true);
+    await scoreAndCache(userData, all);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to load opportunities. Please try again.");
+    setLoading(false);
+  }
+}
   async function scoreAndCache(userData, opps) {
     try {
       const res = await fetch("/api/score-opportunities", {
