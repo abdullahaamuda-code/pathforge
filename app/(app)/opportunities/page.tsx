@@ -41,7 +41,7 @@ async function loadOpportunities() {
   try {
     const userData = await getUser(user.uid);
     const saved = await getSaved(user.uid);
-    setSavedIds(new Set(saved.map((s) => s.opportunityId)));
+    setSavedIds(new Set(saved.map((s: any) => s.opportunityId)));
 
     // Check scored opportunities cache (24hr)
     const cached = await getUserOpportunities(user.uid);
