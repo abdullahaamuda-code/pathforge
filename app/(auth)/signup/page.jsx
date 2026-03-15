@@ -20,7 +20,9 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
 
-  const lang = typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en";
+const [lang, setLang] = useState(
+  typeof navigator !== "undefined" && navigator.language?.startsWith("fr") ? "fr" : "en"
+);
 
   async function handleSignup(e) {
     e.preventDefault();
