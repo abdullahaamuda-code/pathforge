@@ -1,73 +1,77 @@
 # 🛤️ PathForge
-### AI-Driven Platform with Next.js & Firebase.
 
-**PathForge** is an AI-integrated application that leverages Next.js 16 and Firebase for robust data management and authentication, with AI capabilities powered by Groq.
+**Discover your path. Build your future.**
 
----
+PathForge helps you turn "I want to become a ___" into an actual plan. Pick a role or field, and PathForge generates a clear roadmap — the skills, milestones, and courses to get there — powered by AI and backed by real course data.
 
-## 🧠 Tech Stack
-
-- **Language:** TypeScript
-- **Framework:** Next.js 16
-- **Database/Auth:** Firebase
-- **AI Integration:** Groq SDK
-- **Styling:** Tailwind CSS (via PostCSS)
+**Live:** [pathforge-app.vercel.app](https://pathforge-app.vercel.app) · **Repo:** [github.com/abdullahaamuda-code/pathforge](https://github.com/abdullahaamuda-code/pathforge)
 
 ---
 
-## ✨ Key Features
+## How it works
 
-- **AI-Powered Insights:** Integrated with Groq SDK for intelligent responses.
-- **Authentication & Data:** Firebase handles user auth and real-time data.
-- **Modern Frontend:** Built with Next.js 16 App Router for performance.
-- **Multi-Language Support:** Includes internationalization (e.g., `fr.json`).
-- **Web Scraping Module:** Custom scrapers for course data (`scrapers/`).
+1. **Pick a role or field** — e.g. Frontend Developer, Data Analyst, Product Designer
+2. **Get a generated roadmap** — an ordered path of skills and milestones for that role, powered by Groq
+3. **Follow it with real course data** — pulled in via PathForge's own scraping pipeline, not generic links
 
 ---
 
-## 🎯 Use Cases
+## Features
 
-- **Education:** Curating and presenting course information.
-- **AI Applications:** Demo platform for Groq-powered features.
-- **Authentication Demos:** Showcasing Firebase auth flows.
-- **Data Aggregation:** Combining scraping with AI analysis.
+- **AI-generated roadmaps** — pick a role, get a structured path forward, powered by the Groq SDK
+- **Real course data** — a custom scraping module keeps course recommendations grounded in what's actually available, not guesses
+- **Accounts & saved progress** — Firebase handles auth and real-time data, so a roadmap persists across sessions
+- **Multi-language support** — internationalization built in (e.g. French)
+- **Modern frontend** — Next.js 16 App Router for fast, responsive navigation
 
----
+## Tech Stack
 
-## 🚦 Project Status
+| | |
+|---|---|
+| Language | TypeScript |
+| Framework | Next.js 16 (App Router) |
+| Database/Auth | Firebase |
+| AI | Groq SDK |
+| Styling | Tailwind CSS |
 
-**Active Development** — Core architecture is established with ongoing feature enhancements.
+## Status
 
 | Area | Status |
-|------|--------|
-| Next.js Frontend | ✅ Functional |
-| Firebase Integration | ✅ Functional |
-| AI (Groq) Integration | ✅ Functional |
-| Web Scraping | ✅ Implemented |
+|---|---|
+| Next.js frontend | ✅ Functional |
+| Firebase integration | ✅ Functional |
+| AI (Groq) roadmap generation | ✅ Functional |
+| Web scraping (course data) | ✅ Implemented |
 | Internationalization | ✅ Started |
 | CI/CD | ✅ GitHub Actions configured |
 
 ---
 
-## 🔗 Repository
+## Local Setup
 
-**[https://github.com/abdullahaamuda-code/pathforge](https://github.com/abdullahaamuda-code/pathforge)**
-
----
-
-## 🛠️ Local Setup
+**1. Clone the repository**
 
 ```bash
-# Clone the repository
 git clone https://github.com/abdullahaamuda-code/pathforge.git
 cd pathforge
+```
 
-# Install dependencies
+**2. Install dependencies**
+
+```bash
 npm install
+```
 
-# Set up environment variables (Firebase, Groq API keys)
-# Run the development server
+**3. Configure environment variables**
+
+Create a `.env.local` with your Firebase and Groq credentials, then run:
+
+```bash
 npm run dev
 ```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
 ---
-**Built with ❤️ by Abdullah A-Amuda** 
+
+Built with ❤️ by Abdullah A-Amuda
