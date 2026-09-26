@@ -1,4 +1,4 @@
-# 🛤️ PathForge
+# PathForge
 
 **Discover your path. Build your future.**
 
@@ -38,12 +38,12 @@ PathForge helps you turn "I want to become a ___" into an actual plan. Pick a ro
 
 | Area | Status |
 |---|---|
-| Next.js frontend | ✅ Functional |
-| Firebase integration | ✅ Functional |
-| AI (Groq) roadmap generation | ✅ Functional |
-| Web scraping (course data) | ✅ Implemented |
-| Internationalization | ✅ Started |
-| CI/CD | ✅ GitHub Actions configured |
+| Next.js frontend | working |
+| Firebase integration | working |
+| AI (Groq) roadmap generation | working |
+| Web scraping (course data) | done |
+| Internationalization | started |
+| CI/CD | GitHub Actions configured |
 
 ---
 
@@ -72,6 +72,16 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000).
 
+## Why
+
+Career advice online is either vague or generic. A generated roadmap only becomes a
+plan when it's grounded in courses that actually exist — that's why the scraping
+pipeline is a feature, not an implementation detail.
+
+## License
+
+[MIT](LICENSE)
+
 ---
 
-Built with ❤️ by Abdullah A-Amuda
+Built by Abdullah A-Amuda.
